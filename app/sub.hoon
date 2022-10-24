@@ -23,13 +23,16 @@
 ::
 ++  on-agent
   |=  [=wire =sign:agent:gall]
+  ^-  (quip card:agent:gall _this)
   ?+    -.sign  !!
       %watch-ack  `this
       %kick       `this
       %fact
     =+  !<(=bait:lure q.cage.sign)
     ~&  [%sub-got bait]
-    `this
+    :_  this  :_  ~
+    =/  msg  (cat 3 'welcome, your token was ' token.bait)
+    [%pass /hi %agent [ship.bait %hood] %poke %helm-hi !>(msg)]
   ==
 ::
 ++  on-fail

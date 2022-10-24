@@ -50,8 +50,9 @@
 ++  on-watch
   |=  =path
   ^-  (quip card _this)
+  ?>  =(our.bowl src.bowl)
   ?+  path  (on-watch:def path)
-    [%bites ~]  ?>(=(our.bowl src.bowl) `this)
+    [%bites ~]  `this
   ==
 ::
 ++  on-leave  on-leave:def
