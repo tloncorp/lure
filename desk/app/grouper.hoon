@@ -2,12 +2,12 @@
 /+  default-agent, verb, dbug
 ::
 |%
-++  tokens  (map cord flag:groups)
+++  enabled-groups  (set cord)
 +$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
   ==
-+$  state-0  [%0 =tokens]
++$  state-0  [%0 =enabled-groups]
 --
 ::
 =|  state-0
@@ -18,6 +18,9 @@
 +*  this  .
     def   ~(. (default-agent this %.n) bowl)
 ::
+++  on-init
+  :_  this
+  ~[[%pass /bite-wire %agent [our.bowl %lure] %watch /bites]]
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
@@ -25,9 +28,12 @@
     %leave  :_  this  ~[[%pass /bite-wire %agent [our.bowl %lure] %leave ~]]
     %watch  :_  this  ~[[%pass /bite-wire %agent [our.bowl %lure] %watch /bites]]
     ::
-      %token
-    =+  !<([token=cord =flag:groups] vase)
-    `this(tokens (~(put by tokens) token flag))
+      %grouper-enable
+    =+  !<(name=cord vase)
+    `this(enabled-groups (~(put in enabled-groups) name))
+      %grouper-disable
+    =+  !<(name=cord vase)
+    `this(enabled-groups (~(del in enabled-groups) name))
   ==
 ::
 ++  on-watch
@@ -42,7 +48,8 @@
       %kick       `this
       %fact
     =+  !<(=bait:lure q.cage.sign)
-    =/  =invite:groups  [(~(got by tokens) token.bait) ship.bait]
+    ?>  (~(has in enabled-groups) token.bait)
+    =/  =invite:groups  [[our.bowl token.bait] ship.bait]
     :_  this  
     ~[[%pass /invite %agent [our.bowl %groups] %poke %group-invite !>(invite)]]
   ==
@@ -55,7 +62,6 @@
   |=  =path
   `this
 ::
-++  on-init   `this
 ++  on-save   !>(state)
 ++  on-load   |=(old=vase `this(state !<(_state old)))
 ++  on-arvo   on-arvo:def

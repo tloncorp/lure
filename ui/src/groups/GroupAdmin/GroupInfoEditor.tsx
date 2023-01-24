@@ -14,7 +14,12 @@ import useGroupPrivacy from '@/logic/useGroupPrivacy';
 import { Status } from '@/logic/status';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useGroupName } from '@/state/groups/groups';
-import { useLureBait, lurePokeDescription } from '@/state/lure/lure';
+import {
+  useLureBait,
+  lurePokeDescription,
+  lureEnableGroup,
+  lureDisableGroup,
+} from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
 
@@ -171,7 +176,14 @@ export default function GroupInfoEditor({ title }: ViewProps) {
           </label>
           <input
             checked={lureEnabled}
-            onChange={() => setLureEnabled(!lureEnabled)}
+            onChange={async () => {
+              if (lureEnabled) {
+                await lureDisableGroup(name);
+              } else {
+                await lureEnableGroup(name);
+              }
+              setLureEnabled(!lureEnabled);
+            }}
             className="input icon-toggle ml-2"
             type="checkbox"
           />
@@ -184,7 +196,6 @@ export default function GroupInfoEditor({ title }: ViewProps) {
           <button
             className="small-button mt-1 h-6 whitespace-nowrap"
             onClick={() => {
-              // TODO poke lure agent to enable or disable the token for this group
               navigator.clipboard.writeText(lureURL);
               setCopyButtonLabel('Copied');
             }}

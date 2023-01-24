@@ -25,3 +25,19 @@ export async function lurePokeDescription(token: string, description: string) {
     },
   });
 }
+
+export async function lureEnableGroup(name: string) {
+  await api.poke({
+    app: 'grouper',
+    mark: 'grouper-enable',
+    json: name,
+  });
+}
+
+export async function lureDisableGroup(name: string) {
+  await api.poke({
+    app: 'grouper',
+    mark: 'grouper-disable',
+    json: name,
+  });
+}
