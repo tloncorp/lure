@@ -491,7 +491,7 @@ function RoutedApp() {
       case 'chat':
         return '/apps/talk';
       default:
-        return '/apps/groups';
+        return '/apps/lure';
     }
   };
 

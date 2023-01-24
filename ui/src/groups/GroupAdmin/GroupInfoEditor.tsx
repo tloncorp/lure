@@ -13,6 +13,8 @@ import {
 import useGroupPrivacy from '@/logic/useGroupPrivacy';
 import { Status } from '@/logic/status';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
+import { useGroupName } from '@/state/groups/groups';
+import useLureBait from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
 
@@ -36,6 +38,11 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [status, setStatus] = useState<Status>('initial');
   const [deleteStatus, setDeleteStatus] = useState<Status>('initial');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const lureBait = useLureBait();
+  const name = useGroupName();
+  const lureToken = name;
+  const [lureEnabled, setLureEnabled] = useState(false);
+  const lureURL = `${lureBait}${window.our}/${lureToken}`;
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -151,6 +158,34 @@ export default function GroupInfoEditor({ title }: ViewProps) {
           </footer>
         </form>
       </FormProvider>
+      <div className="card mb-4">
+        <div className="flex flex-row">
+          <label htmlFor="title" className="mt-1 font-bold">
+            Invite Links Enabled
+          </label>
+          <input
+            checked={lureEnabled}
+            onChange={() => setLureEnabled(!lureEnabled)}
+            className="input icon-toggle ml-2"
+            type="checkbox"
+          />
+        </div>
+        <div className={`flex flex-row ${lureEnabled ? 'visible' : 'hidden'}`}>
+          <label htmlFor="title" className="mt-2 font-bold">
+            Invite Link
+          </label>
+          <input value={lureURL} className="input mt-0" type="text" readOnly />
+          <button
+            className="small-button mt-1 h-6 whitespace-nowrap"
+            onClick={() => {
+              // TODO poke lure agent to enable or disable the token for this group
+              navigator.clipboard.writeText(lureURL);
+            }}
+          >
+            Copy
+          </button>
+        </div>
+      </div>
       <div className="card">
         <h2 className="mb-1 text-lg font-bold">Delete Group</h2>
         <p className="mb-4">

@@ -10,7 +10,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 
 // https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
-  const app = process.env.APP || 'groups';
+  const app = process.env.APP || 'lure';
   process.env.VITE_APP = app;
   process.env.VITE_STORAGE_VERSION =
     mode === 'dev' ? Date.now().toString() : packageJson.version;
@@ -31,7 +31,7 @@ export default ({ mode }: { mode: string }) => {
       case 'chat':
         return '/apps/talk/';
       default:
-        return '/apps/groups/';
+        return '/apps/lure/';
     }
   };
 
@@ -63,7 +63,7 @@ export default ({ mode }: { mode: string }) => {
         return [
           basicSsl(),
           urbitPlugin({
-            base: 'groups',
+            base: 'lure',
             target: SHIP_URL,
             changeOrigin: true,
             secure: false,

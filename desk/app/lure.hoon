@@ -61,6 +61,7 @@
   ^-  (unit (unit cage))
   ?+  path  [~ ~]
     [%x %service ~]  ``noun+!>(vic)
+    [%x %bait ~]  ``json+!>([%s vic])
   ==
 ::
 ++  on-arvo   on-arvo:def
