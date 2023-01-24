@@ -6,9 +6,13 @@
   $%  state-0
   ==
 ::
+::  vic: URL of bait service
+::  civ: @p of bait service
+::
 +$  state-0
   $:  %0
       vic=@t
+      civ=ship
   ==
 --
 =|  state-0
@@ -22,7 +26,7 @@
 ::
 ++  on-init
   ^-  (quip card _this)
-  `this(vic 'http://localhost:8080/urbit/')
+  `this(vic 'http://localhost:8080/urbit/', civ our.bowl)
 ::
 ++  on-save  !>(state)
 ++  on-load
@@ -44,6 +48,10 @@
       %lure-bait
     =+  !<(=bait:lure vase)
     [[%give %fact ~[/bites] mark !>(bait)]~ this]
+      %lure-describe
+    :_  this
+    =+  !<  [token=cord description=cord]  vase
+    ~[[%pass /describe %agent [civ %lure-service] %poke %describe !>([token description])]]
   ==
 ::
 ++  on-agent  on-agent:def

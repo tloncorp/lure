@@ -14,7 +14,7 @@ import useGroupPrivacy from '@/logic/useGroupPrivacy';
 import { Status } from '@/logic/status';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useGroupName } from '@/state/groups/groups';
-import useLureBait from '@/state/lure/lure';
+import { useLureBait, lurePokeDescription } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
 
@@ -43,6 +43,12 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const lureToken = name;
   const [lureEnabled, setLureEnabled] = useState(false);
   const lureURL = `${lureBait}${window.our}/${lureToken}`;
+  const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
+  const [lureDescription, setLureDescription] = useState(
+    'Write a welcome message for your group'
+  );
+  const [lureDescriptionSaveLabel, setLureDescriptionSaveLabel] =
+    useState('Save');
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -180,9 +186,33 @@ export default function GroupInfoEditor({ title }: ViewProps) {
             onClick={() => {
               // TODO poke lure agent to enable or disable the token for this group
               navigator.clipboard.writeText(lureURL);
+              setCopyButtonLabel('Copied');
             }}
           >
-            Copy
+            {copyButtonLabel}
+          </button>
+        </div>
+        <div className={`flex flex-col ${lureEnabled ? 'visible' : 'hidden'}`}>
+          <label htmlFor="title" className="mt-2 font-bold">
+            Invite Description
+          </label>
+          <textarea
+            value={lureDescription}
+            className="input mt-0"
+            onChange={(e) => {
+              setLureDescription(e.target.value);
+              setLureDescriptionSaveLabel('Save');
+            }}
+          />
+          <button
+            className="button mt-2 whitespace-nowrap"
+            onClick={async () => {
+              // TODO poke lure bait to set description
+              await lurePokeDescription(name, lureDescription);
+              setLureDescriptionSaveLabel('Saved');
+            }}
+          >
+            {lureDescriptionSaveLabel}
           </button>
         </div>
       </div>

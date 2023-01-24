@@ -8,18 +8,20 @@
 ::
 +$  state-0
   $:  %0
-      ~
+      todd=(map [inviter=ship token=cord] description=cord)
   ==
 --
 ::
 |%
 ++  landing-page
+  |=  description=cord
   ^-  manx
   ;html
     ;head
       ;title:"Lure"
     ==
     ;body
+      ;p: description: {<(trip description)>}
       Enter your @p:
       ;form(method "post")
         ;input(type "text", name "ship", placeholder "~sampel");
@@ -75,7 +77,9 @@
     =/  inviter  (slav %p i.t.site.line)
     =/  token    i.t.t.site.line
     ?+    method.request  (give not-found:gen:server)
-        %'GET'   (give (manx-response:gen:server landing-page))
+        %'GET'
+      =/  description  (fall (~(get by todd) [inviter token]) '')
+      (give (manx-response:gen:server (landing-page description)))
         %'POST'
       ?~  body.request
         (give not-found:gen:server)
@@ -92,6 +96,13 @@
       |=  =simple-payload:http
       (give-simple-payload:app:server id simple-payload)
     --
+      %describe
+    =+  !<([token=cord description=cord] vase)
+    `this(todd (~(put by todd) [src.bowl token] description))
+  ::
+      %undescribe
+    =+  !<([[=ship token=cord] description=cord] vase)
+    `this(todd (~(del by todd) [src.bowl token]))
   ==
 ::
 ++  on-agent  on-agent:def

@@ -1,7 +1,7 @@
 import api from '@/api';
 import { useState, useEffect } from 'react';
 
-export default function useLureBait() {
+export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
   useEffect(() => {
     api
@@ -13,4 +13,15 @@ export default function useLureBait() {
   });
 
   return lureBait;
+}
+
+export async function lurePokeDescription(token: string, description: string) {
+  await api.poke({
+    app: 'lure',
+    mark: 'lure-describe',
+    json: {
+      token,
+      description,
+    },
+  });
 }
