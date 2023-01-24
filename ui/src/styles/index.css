@@ -1,0 +1,15 @@
+/**
+* See: https://tailwindcss.com/docs/using-with-preprocessors#using-post-css-as-your-preprocessor=
+*/
+@import 'tailwindcss/base';
+@import './base';
+
+@import 'tailwindcss/components';
+@import './components';
+@import '../components/Layout/Layout.css';
+
+@import 'tailwindcss/utilities';
+
+@import './utilities.css';
+
+@import 'prismjs/themes/prism-tomorrow.min.css';
