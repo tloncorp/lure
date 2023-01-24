@@ -53,7 +53,7 @@
 ::
 ++  on-init
   ^-  (quip card _this)
-  [[%pass /eyre/connect %arvo %e %connect [~ /urbit] dap.bowl]~ this]
+  [[%pass /eyre/connect %arvo %e %connect [~ /lure] dap.bowl]~ this]
 ::
 ++  on-save  !>(state)
 ++  on-load
@@ -72,10 +72,18 @@
     |^
     :_  this
     =/  line=request-line:server  (parse-request-line:server url.request)
-    ?.  ?=([[~ [%urbit @ @ ~]] ~] line)
-      (give not-found:gen:server)
-    =/  inviter  (slav %p i.t.site.line)
-    =/  token    i.t.t.site.line
+    =/  inviter
+      ?:  ?=([[~ [%lure @ @ ~]] ~] line)
+        (slav %p i.t.site.line)
+      ?:  ?=([[~ [@ @ ~]] ~] line)
+        (slav %p i.site.line)
+      !!
+    =/  token
+      ?:  ?=([[~ [%lure @ @ ~]] ~] line)
+        i.t.t.site.line
+      ?:  ?=([[~ [@ @ ~]] ~] line)
+        i.t.site.line
+      !!
     ?+    method.request  (give not-found:gen:server)
         %'GET'
       =/  description  (fall (~(get by todd) [inviter token]) '')
@@ -103,6 +111,12 @@
       %undescribe
     =+  !<(token=cord vase)
     `this(todd (~(del by todd) [src.bowl token]))
+      %bind-slash
+    :_  this
+    ~[[%pass /eyre/connect %arvo %e %connect [~ /] dap.bowl]]
+      %unbind-slash
+    :_  this
+    ~[[%pass /eyre/connect %arvo %e %connect [~ /] %docket]]
   ==
 ::
 ++  on-agent  on-agent:def
