@@ -9,3 +9,5 @@
 Dev Moon: ~samnec-dozzod-marzod, 34.171.101.183
 
 Prod Moon: ~litnec-dozzod-marzod, 35.238.247.180
+
+http://bait-dev.tlon.io:8080/~sampel-palnet/mytoken
