@@ -26,7 +26,7 @@
 ::
 ++  on-init
   ^-  (quip card _this)
-  `this(vic 'http://localhost:8080/urbit/', civ our.bowl)
+  `this(vic 'https://bait-dev.tlon.io/', civ ~samnec-dozzod-marzod)
 ::
 ++  on-save  !>(state)
 ++  on-load
