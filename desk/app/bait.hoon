@@ -24,13 +24,15 @@
       ;p: description: {<(trip description)>}
       Enter your @p:
       ;form(method "post")
-        ;input(type "text", name "ship", placeholder "~sampel");
+        ;input(type "text", name "ship", id "ship", placeholder "~sampel");
         ;button(type "submit"):"Request invite"
       ==
+      ;script: ship = document.cookie.split("; ").find((row) => row.startsWith("ship="))?.split("=")[1]; document.getElementById("ship").value=(ship || "~sampel-palnet")
     ==
   ==
 ::
 ++  sent-page
+  |=  invitee=ship
   ^-  manx
   ;html
     ;head
@@ -38,6 +40,7 @@
     ==
     ;body
       Your invite has been sent!  Go to your ship to accept it.
+      ;script: document.cookie="ship={(trip (scot %p invitee))}"
     ==
   ==
 --
@@ -97,7 +100,7 @@
       :-  :*  %pass  /bite  %agent  [inviter %reel]
               %poke  %reel-bite  !>([%bite-0 token invitee])
           ==
-      (give (manx-response:gen:server sent-page))
+      (give (manx-response:gen:server (sent-page invitee)))
     ==
     ::
     ++  give
