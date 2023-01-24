@@ -101,7 +101,7 @@
     `this(todd (~(put by todd) [src.bowl token] description))
   ::
       %undescribe
-    =+  !<([[=ship token=cord] description=cord] vase)
+    =+  !<(token=cord vase)
     `this(todd (~(del by todd) [src.bowl token]))
   ==
 ::
