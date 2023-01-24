@@ -1,4 +1,4 @@
-/-  lure, groups
+/-  reel, groups
 /+  default-agent, verb, dbug
 ::
 |%
@@ -20,13 +20,13 @@
 ::
 ++  on-init
   :_  this
-  ~[[%pass /bite-wire %agent [our.bowl %lure] %watch /bites]]
+  ~[[%pass /bite-wire %agent [our.bowl %reel] %watch /bites]]
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
   ?+  mark  !!
-    %leave  :_  this  ~[[%pass /bite-wire %agent [our.bowl %lure] %leave ~]]
-    %watch  :_  this  ~[[%pass /bite-wire %agent [our.bowl %lure] %watch /bites]]
+    %leave  :_  this  ~[[%pass /bite-wire %agent [our.bowl %reel] %leave ~]]
+    %watch  :_  this  ~[[%pass /bite-wire %agent [our.bowl %reel] %watch /bites]]
     ::
       %grouper-enable
     =+  !<(name=cord vase)
@@ -47,9 +47,9 @@
       %watch-ack  `this
       %kick       `this
       %fact
-    =+  !<(=bait:lure q.cage.sign)
-    ?>  (~(has in enabled-groups) token.bait)
-    =/  =invite:groups  [[our.bowl token.bait] ship.bait]
+    =+  !<(=bite:reel q.cage.sign)
+    ?>  (~(has in enabled-groups) token.bite)
+    =/  =invite:groups  [[our.bowl token.bite] ship.bite]
     :_  this  
     ~[[%pass /invite %agent [our.bowl %groups] %poke %group-invite !>(invite)]]
   ==

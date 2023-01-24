@@ -3,7 +3,7 @@
   $%  [%set-service vic=@t]
   ==
 ::
-+$  bait
++$  bite
   $%  [%bite-0 token=@ta ship=@p]
   ==
 --

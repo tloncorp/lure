@@ -1,4 +1,4 @@
-/-  lure
+/-  reel
 /+  default-agent, verb, dbug, server
 |%
 +$  card  card:agent:gall
@@ -86,8 +86,8 @@
       ?.  =('ship=%7E' (end [3 8] q.u.body.request))
         (give not-found:gen:server)
       =/  invitee  (slav %p (cat 3 '~' (rsh [3 8] q.u.body.request)))
-      :-  :*  %pass  /bite  %agent  [inviter %lure]
-              %poke  %lure-bait  !>([%bite-0 token invitee])
+      :-  :*  %pass  /bite  %agent  [inviter %reel]
+              %poke  %reel-bite  !>([%bite-0 token invitee])
           ==
       (give (manx-response:gen:server sent-page))
     ==
@@ -99,7 +99,7 @@
       %describe
     =+  !<([token=cord description=cord] vase)
     `this(todd (~(put by todd) [src.bowl token] description))
-  ::
+  ::g
       %undescribe
     =+  !<(token=cord vase)
     `this(todd (~(del by todd) [src.bowl token]))
