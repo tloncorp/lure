@@ -6,7 +6,7 @@ export function useLureBait() {
   useEffect(() => {
     api
       .scry<string>({
-        app: 'lure',
+        app: 'reel',
         path: '/bait',
       })
       .then((result) => setLureBait(result));
@@ -17,8 +17,8 @@ export function useLureBait() {
 
 export async function lurePokeDescription(token: string, description: string) {
   await api.poke({
-    app: 'lure',
-    mark: 'lure-describe',
+    app: 'reel',
+    mark: 'reel-describe',
     json: {
       token,
       description,

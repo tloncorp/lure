@@ -1,4 +1,4 @@
-/-  lure
+/-  reel
 /+  default-agent, verb, dbug
 |%
 +$  card  card:agent:gall
@@ -40,18 +40,18 @@
   |=  [=mark =vase]
   ^-  (quip card _this)
   ?+    mark  (on-poke:def mark vase)
-      %lure-command
+      %reel-command
     ?>  =(our.bowl src.bowl)
-    =+  !<(=command:lure vase)
+    =+  !<(=command:reel vase)
     `this(vic vic.command)
   ::
-      %lure-bait
-    =+  !<(=bait:lure vase)
-    [[%give %fact ~[/bites] mark !>(bait)]~ this]
-      %lure-describe
+      %reel-bite
+    =+  !<(=bite:reel vase)
+    [[%give %fact ~[/bites] mark !>(bite)]~ this]
+      %reel-describe
     :_  this
     =+  !<  [token=cord description=cord]  vase
-    ~[[%pass /describe %agent [civ %lure-service] %poke %describe !>([token description])]]
+    ~[[%pass /describe %agent [civ %bait] %poke %describe !>([token description])]]
   ==
 ::
 ++  on-agent  on-agent:def
