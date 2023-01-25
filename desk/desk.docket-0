@@ -2,7 +2,7 @@
     info+'Groups UI with invites'
     color+0xff.f5f9
     image+'https://bootstrap.urbit.org/icon-groups.svg?v=1'
-    glob-ames+[~zod 0v0]
+    glob-ames+[~samnec-dozzod-marzod 0v0]
     base+'lure'
     version+[0 0 1]
     website+'https://tlon.io'
