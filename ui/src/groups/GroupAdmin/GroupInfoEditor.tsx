@@ -19,6 +19,7 @@ import {
   lurePokeDescription,
   lureEnableGroup,
   lureDisableGroup,
+  useLureEnabled,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
@@ -46,7 +47,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const lureBait = useLureBait();
   const name = useGroupName();
   const lureToken = name;
-  const [lureEnabled, setLureEnabled] = useState(false);
+  const [lureEnabled, setLureEnabled] = useLureEnabled(name);
   const lureURL = `${lureBait}${window.our}/${lureToken}`;
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
   const [lureDescription, setLureDescription] = useState(

@@ -65,5 +65,12 @@
 ++  on-save   !>(state)
 ++  on-load   |=(old=vase `this(state !<(_state old)))
 ++  on-arvo   on-arvo:def
-++  on-peek   on-peek:def
+++  on-peek
+  |=  =path
+  ^-  (unit (unit cage))
+  ?+  path  [~ ~]
+      [%x %enabled @ ~]
+    ``json+!>([%b (~(has in enabled-groups) i.t.t.path)])
+  ==
+::
 --
