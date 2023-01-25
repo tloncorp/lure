@@ -8,11 +8,13 @@
 ::
 ::  vic: URL of bait service
 ::  civ: @p of bait service
+::  descriptions: map from tokens to their descriptions
 ::
 +$  state-0
   $:  %0
       vic=@t
       civ=ship
+      descriptions=(map cord cord)
   ==
 --
 =|  state-0
@@ -48,13 +50,26 @@
       %reel-bite
     =+  !<(=bite:reel vase)
     [[%give %fact ~[/bites] mark !>(bite)]~ this]
+  ::
       %reel-describe
     :_  this
     =+  !<  [token=cord description=cord]  vase
-    ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token description])]]
+    ~[[%pass [%describe token description ~] %agent [civ %bait] %poke %bait-describe !>([token description])]]
   ==
 ::
-++  on-agent  on-agent:def
+++  on-agent
+  |=  [=wire =sign:agent:gall]
+  ^-  (quip card _this)
+  ?+  wire  (on-agent:def wire sign)
+      [%describe @ @ ~]
+    ?+  -.sign  (on-agent:def wire sign)
+        %poke-ack
+      ?~  p.sign
+        `this(descriptions (~(put by descriptions) i.t.wire i.t.t.wire))
+      (on-agent:def wire sign)
+    ==
+  ==
+::
 ++  on-watch
   |=  =path
   ^-  (quip card _this)
@@ -70,6 +85,7 @@
   ?+  path  [~ ~]
     [%x %service ~]  ``noun+!>(vic)
     [%x %bait ~]  ``json+!>([%s vic])
+    [%x %description @ ~]  ``json+!>([%s (~(got by descriptions) i.t.t.path)])
   ==
 ::
 ++  on-arvo   on-arvo:def

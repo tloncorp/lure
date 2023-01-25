@@ -16,10 +16,11 @@ import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useGroupName } from '@/state/groups/groups';
 import {
   useLureBait,
-  lurePokeDescription,
   lureEnableGroup,
   lureDisableGroup,
   useLureEnabled,
+  useLureDescription,
+  lurePokeDescription,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
@@ -50,9 +51,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [lureEnabled, setLureEnabled] = useLureEnabled(name);
   const lureURL = `${lureBait}${window.our}/${lureToken}`;
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
-  const [lureDescription, setLureDescription] = useState(
-    'Write a welcome message for your group'
-  );
+  const [lureDescription, setLureDescription] = useLureDescription(name);
   const [lureDescriptionSaveLabel, setLureDescriptionSaveLabel] =
     useState('Save');
 
