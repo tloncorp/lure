@@ -1,0 +1,17 @@
+name: Push to develop
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - '.github/workflows/**.yml'
+      - '.github/workflows/scripts/**.sh'
+      - 'desk/**'
+
+jobs:
+  urbit:
+    uses: ./.github/workflows/shared.yml
+    with:
+      ship: 'samnec-dozzod-marzod'
+    secrets: inherit
