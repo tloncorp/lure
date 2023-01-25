@@ -51,7 +51,7 @@
       %reel-describe
     :_  this
     =+  !<  [token=cord description=cord]  vase
-    ~[[%pass /describe %agent [civ %bait] %poke %describe !>([token description])]]
+    ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token description])]]
   ==
 ::
 ++  on-agent  on-agent:def

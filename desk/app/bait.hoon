@@ -107,11 +107,11 @@
       |=  =simple-payload:http
       (give-simple-payload:app:server id simple-payload)
     --
-      %describe
+      %bait-describe
     =+  !<([token=cord description=cord] vase)
     `this(todd (~(put by todd) [src.bowl token] description))
-  ::g
-      %undescribe
+  ::
+      %bait-undescribe
     =+  !<(token=cord vase)
     `this(todd (~(del by todd) [src.bowl token]))
       %bind-slash
