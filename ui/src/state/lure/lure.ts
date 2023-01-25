@@ -15,6 +15,21 @@ export function useLureBait() {
   return lureBait;
 }
 
+export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
+  const [lureEnabled, setLureEnabled] = useState<boolean>(false);
+
+  useEffect(() => {
+    api
+      .scry<boolean>({
+        app: 'grouper',
+        path: `/enabled/${name}`,
+      })
+      .then((result) => setLureEnabled(result));
+  });
+
+  return [lureEnabled, setLureEnabled];
+}
+
 export async function lurePokeDescription(token: string, description: string) {
   await api.poke({
     app: 'reel',

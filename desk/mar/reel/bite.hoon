@@ -1,9 +1,9 @@
-/-  lure
-|_  =bait:lure
+/-  reel
+|_  =bite:reel
 ++  grad  %noun
 ++  grab
   |%
-  ++  noun  bait:lure
+  ++  noun  bite:reel
   --
 ++  grow
   |%
