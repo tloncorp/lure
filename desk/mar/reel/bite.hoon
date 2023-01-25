@@ -7,6 +7,6 @@
   --
 ++  grow
   |%
-  ++  noun  bait
+  ++  noun  bite
   --
 --
