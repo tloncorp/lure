@@ -1,9 +1,10 @@
 import api from '@/api';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useEffectOnce } from 'usehooks-ts';
 
 export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
-  useEffect(() => {
+  useEffectOnce(() => {
     api
       .scry<string>({
         app: 'reel',
@@ -18,7 +19,7 @@ export function useLureBait() {
 export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
   const [lureEnabled, setLureEnabled] = useState<boolean>(false);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     api
       .scry<boolean>({
         app: 'grouper',
@@ -28,6 +29,25 @@ export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
   });
 
   return [lureEnabled, setLureEnabled];
+}
+
+export function useLureDescription(
+  name: string
+): [string, (s: string) => void] {
+  const [lureDescription, setLureDescription] = useState<string>(
+    'Write a welcome message for your group'
+  );
+
+  useEffectOnce(() => {
+    api
+      .scry<string>({
+        app: 'reel',
+        path: `/description/${name}`,
+      })
+      .then((result) => setLureDescription(result));
+  });
+
+  return [lureDescription, setLureDescription];
 }
 
 export async function lurePokeDescription(token: string, description: string) {
