@@ -188,21 +188,6 @@ export default function GroupInfoEditor({ title }: ViewProps) {
             type="checkbox"
           />
         </div>
-        <div className={`flex flex-row ${lureEnabled ? 'visible' : 'hidden'}`}>
-          <label htmlFor="title" className="mt-2 font-bold">
-            Invite Link
-          </label>
-          <input value={lureURL} className="input mt-0" type="text" readOnly />
-          <button
-            className="small-button mt-1 h-6 whitespace-nowrap"
-            onClick={() => {
-              navigator.clipboard.writeText(lureURL);
-              setCopyButtonLabel('Copied');
-            }}
-          >
-            {copyButtonLabel}
-          </button>
-        </div>
         <div className={`flex flex-col ${lureEnabled ? 'visible' : 'hidden'}`}>
           <label htmlFor="title" className="mt-2 font-bold">
             Invite Description
@@ -215,16 +200,43 @@ export default function GroupInfoEditor({ title }: ViewProps) {
               setLureDescriptionSaveLabel('Save');
             }}
           />
-          <button
-            className="button mt-2 whitespace-nowrap"
-            onClick={async () => {
-              // TODO poke lure bait to set description
-              await lurePokeDescription(name, lureDescription);
-              setLureDescriptionSaveLabel('Saved');
-            }}
+          <div className="flex items-center justify-end space-x-2">
+            <button
+              className="button mt-2 whitespace-nowrap"
+              onClick={async () => {
+                await lurePokeDescription(name, lureDescription);
+                setLureDescriptionSaveLabel('Saved');
+              }}
+            >
+              {lureDescriptionSaveLabel}
+            </button>
+          </div>
+          <div
+            className={`flex flex-row ${
+              lureDescriptionSaveLabel === 'Saved' && lureEnabled
+                ? 'visible'
+                : 'hidden'
+            }`}
           >
-            {lureDescriptionSaveLabel}
-          </button>
+            <label htmlFor="title" className="mt-2 font-bold">
+              Invite Link
+            </label>
+            <input
+              value={lureURL}
+              className="input mt-0"
+              type="text"
+              readOnly
+            />
+            <button
+              className="small-button mt-1 h-6 whitespace-nowrap"
+              onClick={() => {
+                navigator.clipboard.writeText(lureURL);
+                setCopyButtonLabel('Copied');
+              }}
+            >
+              {copyButtonLabel}
+            </button>
+          </div>
         </div>
       </div>
       <div className="card">
