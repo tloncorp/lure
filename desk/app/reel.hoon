@@ -85,7 +85,7 @@
   ?+  path  [~ ~]
     [%x %service ~]  ``noun+!>(vic)
     [%x %bait ~]  ``json+!>([%s vic])
-    [%x %description @ ~]  ``json+!>([%s (~(got by descriptions) i.t.t.path)])
+    [%x %description @ ~]  ``reel-description+!>((fall (~(get by descriptions) i.t.t.path) ''))
   ==
 ::
 ++  on-arvo   on-arvo:def
