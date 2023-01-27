@@ -1,11 +1,12 @@
-|_  [token=cord description=cord]
+/-  reel
+|_  [token=cord =metadata:reel]
 ++  grad  %noun
 ++  grab
   |%
-  ++  noun  (pair cord cord)
+  ++  noun  (pair cord metadata:reel)
   --
 ++  grow
   |%
-  ++  noun  [token description]
+  ++  noun  [token metadata]
   --
 --
