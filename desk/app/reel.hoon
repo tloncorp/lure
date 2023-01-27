@@ -98,8 +98,8 @@
     [%x %bait ~]  ``json+!>([%s vic])
   ::
       [%x %metadata @ ~]
-    =/  =metadata:reel  (~(got by our-metadata) i.t.t.path)
-    ``json+!>((pairs:enjs:format ~[['token' s+i.t.t.path] ['metadata' (enjs-metadata metadata)]]))
+    =/  =metadata:reel  (fall (~(get by our-metadata) i.t.t.path) *metadata:reel)
+    ``json+!>((enjs-metadata metadata))
   ==
 ::
 ++  on-arvo   on-arvo:def

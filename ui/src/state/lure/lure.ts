@@ -31,32 +31,30 @@ export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
   return [lureEnabled, setLureEnabled];
 }
 
-export function useLureDescription(
-  name: string
-): [string, (s: string) => void] {
-  const [lureDescription, setLureDescription] = useState<string>(
+export function useLureWelcome(name: string): [string, (s: string) => void] {
+  const [lureWelcome, setLureWelcome] = useState<string>(
     'Write a welcome message for your group'
   );
 
   useEffectOnce(() => {
     api
-      .scry<string>({
+      .scry<{ tag: string; fields: any }>({
         app: 'reel',
-        path: `/description/${name}`,
+        path: `/metadata/${name}`,
       })
-      .then((result) => setLureDescription(result));
+      .then((result) => setLureWelcome(result.fields.welcome));
   });
 
-  return [lureDescription, setLureDescription];
+  return [lureWelcome, setLureWelcome];
 }
 
-export async function lurePokeDescription(token: string, description: string) {
+export async function lurePokeDescribe(token: string, metadata: any) {
   await api.poke({
     app: 'reel',
     mark: 'reel-describe',
     json: {
       token,
-      description,
+      metadata,
     },
   });
 }
