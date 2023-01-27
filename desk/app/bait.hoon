@@ -88,9 +88,10 @@
     :_  this
     =/  full-line=request-line:server  (parse-request-line:server url.request)
     =/  line
-      ?:  ?=([[~ [%lure @ @ *]] ~] full-line)
+      ~&  site.full-line
+      ?:  ?=([%lure @ @ *] site.full-line)
         t.site.full-line
-      ?:  ?=([[~ [@ @ *]] ~] full-line)
+      ?:  ?=([@ @ *] site.full-line)
         site.full-line
       !!
     =/  inviter  (slav %p i.line)
@@ -99,7 +100,7 @@
         %'GET'
       =/  =metadata:reel
         (fall (~(get by token-metadata) [inviter token]) *metadata:reel)
-      ?:  ?=([@ @ @ ~] line)
+      ?:  ?=([@ @ %metadata ~] line)
         (give (json-response:gen:server (enjs-metadata metadata)))
       (give (manx-response:gen:server (landing-page metadata)))
         %'POST'
