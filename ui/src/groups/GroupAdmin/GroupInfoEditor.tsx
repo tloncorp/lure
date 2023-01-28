@@ -218,7 +218,6 @@ export default function GroupInfoEditor({ title }: ViewProps) {
           <button
             className="button mt-2 whitespace-nowrap"
             onClick={async () => {
-              // TODO poke lure bait to set description
               await lurePokeDescription(name, lureDescription);
               setLureDescriptionSaveLabel('Saved');
             }}
