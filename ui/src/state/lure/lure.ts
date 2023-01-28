@@ -6,11 +6,11 @@ export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
   useEffectOnce(() => {
     api
-      .scry<string>({
+      .scry<{ url: string; ship: string }>({
         app: 'reel',
         path: '/bait',
       })
-      .then((result) => setLureBait(result));
+      .then((result) => setLureBait(result.url));
   });
 
   return lureBait;

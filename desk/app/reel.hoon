@@ -56,7 +56,7 @@
       %reel-command
     ?>  =(our.bowl src.bowl)
     =+  !<(=command:reel vase)
-    `this(vic vic.command)
+    `this(vic vic.command, civ civ.command)
   ::
       %reel-bite
     =+  !<(=bite:reel vase)
@@ -95,8 +95,8 @@
   ^-  (unit (unit cage))
   ?+  path  [~ ~]
     [%x %service ~]  ``noun+!>(vic)
-    [%x %bait ~]  ``json+!>([%s vic])
-  ::
+    [%x %bait ~]  ``reel-bait+!>([vic civ])
+::
       [%x %metadata @ ~]
     =/  =metadata:reel  (fall (~(get by our-metadata) i.t.t.path) *metadata:reel)
     ``json+!>((enjs-metadata metadata))
