@@ -19,8 +19,8 @@ import {
   lureEnableGroup,
   lureDisableGroup,
   useLureEnabled,
-  useLureDescription,
-  lurePokeDescription,
+  useLureWelcome,
+  lurePokeDescribe,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
@@ -51,9 +51,8 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [lureEnabled, setLureEnabled] = useLureEnabled(name);
   const lureURL = `${lureBait}${window.our}/${lureToken}`;
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
-  const [lureDescription, setLureDescription] = useLureDescription(name);
-  const [lureDescriptionSaveLabel, setLureDescriptionSaveLabel] =
-    useState('Save');
+  const [lureWelcome, setLureWelcome] = useLureWelcome(name);
+  const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -208,21 +207,30 @@ export default function GroupInfoEditor({ title }: ViewProps) {
             Invite Description
           </label>
           <textarea
-            value={lureDescription}
+            value={lureWelcome}
             className="input mt-0"
             onChange={(e) => {
-              setLureDescription(e.target.value);
-              setLureDescriptionSaveLabel('Save');
+              setLureWelcome(e.target.value);
+              setLureWelcomeSaveLabel('Save');
             }}
           />
           <button
             className="button mt-2 whitespace-nowrap"
             onClick={async () => {
-              await lurePokeDescription(name, lureDescription);
-              setLureDescriptionSaveLabel('Saved');
+              await lurePokeDescribe(name, {
+                tag: 'groups-0',
+                fields: {
+                  welcome: lureWelcome,
+                  description: group?.meta.description,
+                  cover: group?.meta.cover,
+                  title: group?.meta.title,
+                  image: group?.meta.image,
+                },
+              });
+              setLureWelcomeSaveLabel('Saved');
             }}
           >
-            {lureDescriptionSaveLabel}
+            {lureWelcomeSaveLabel}
           </button>
         </div>
       </div>
