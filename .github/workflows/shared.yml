@@ -1,0 +1,43 @@
+on:
+  workflow_call:
+    inputs:
+      ship:
+        description: 'Name of ship/GCP instance'
+        type: string
+        default: false
+        required: true
+    secrets:
+      GCP_CREDENTIALS:
+        required: true
+      GCP_PROJECT:
+        required: true
+      GCP_USER:
+        required: true
+      GCP_ZONE:
+        required: true
+      TAILSCALE_AUTHKEY:
+        required: true
+
+jobs:
+  upload:
+    runs-on: 'ubuntu-latest'
+    name: 'Sync files to ship'
+
+    steps:
+      - uses: 'actions/checkout@v3'
+
+      - id: 'tailscale'
+        name: 'Login to Tailscale'
+        uses: 'tailscale/github-action@v1'
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - id: 'gcp-auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: 'SSH and sync'
+        run: |
+          gcloud compute ssh --internal-ip --project ${{ secrets.GCP_PROJECT }} --zone ${{ secrets.GCP_ZONE }} --command './commands/sync.sh' ${{ secrets.GCP_USER }}@${{ inputs.ship }}

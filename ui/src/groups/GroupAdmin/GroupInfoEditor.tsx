@@ -19,8 +19,8 @@ import {
   lureEnableGroup,
   lureDisableGroup,
   useLureEnabled,
-  useLureDescription,
-  lurePokeDescription,
+  useLureWelcome,
+  lurePokeDescribe,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
@@ -51,9 +51,8 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [lureEnabled, setLureEnabled] = useLureEnabled(name);
   const lureURL = `${lureBait}${window.our}/${lureToken}`;
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
-  const [lureDescription, setLureDescription] = useLureDescription(name);
-  const [lureDescriptionSaveLabel, setLureDescriptionSaveLabel] =
-    useState('Save');
+  const [lureWelcome, setLureWelcome] = useLureWelcome(name);
+  const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -193,50 +192,31 @@ export default function GroupInfoEditor({ title }: ViewProps) {
             Invite Description
           </label>
           <textarea
-            value={lureDescription}
+            value={lureWelcome}
             className="input mt-0"
             onChange={(e) => {
-              setLureDescription(e.target.value);
-              setLureDescriptionSaveLabel('Save');
+              setLureWelcome(e.target.value);
+              setLureWelcomeSaveLabel('Save');
             }}
           />
-          <div className="flex items-center justify-end space-x-2">
-            <button
-              className="button mt-2 whitespace-nowrap"
-              onClick={async () => {
-                await lurePokeDescription(name, lureDescription);
-                setLureDescriptionSaveLabel('Saved');
-              }}
-            >
-              {lureDescriptionSaveLabel}
-            </button>
-          </div>
-          <div
-            className={`flex flex-row ${
-              lureDescriptionSaveLabel === 'Saved' && lureEnabled
-                ? 'visible'
-                : 'hidden'
-            }`}
+          <button
+            className="button mt-2 whitespace-nowrap"
+            onClick={async () => {
+              await lurePokeDescribe(name, {
+                tag: 'groups-0',
+                fields: {
+                  welcome: lureWelcome,
+                  description: group?.meta.description,
+                  cover: group?.meta.cover,
+                  title: group?.meta.title,
+                  image: group?.meta.image,
+                },
+              });
+              setLureWelcomeSaveLabel('Saved');
+            }}
           >
-            <label htmlFor="title" className="mt-2 font-bold">
-              Invite Link
-            </label>
-            <input
-              value={lureURL}
-              className="input mt-0"
-              type="text"
-              readOnly
-            />
-            <button
-              className="small-button mt-1 h-6 whitespace-nowrap"
-              onClick={() => {
-                navigator.clipboard.writeText(lureURL);
-                setCopyButtonLabel('Copied');
-              }}
-            >
-              {copyButtonLabel}
-            </button>
-          </div>
+            {lureWelcomeSaveLabel}
+          </button>
         </div>
       </div>
       <div className="card">
