@@ -99,7 +99,7 @@
 ::
       [%x %metadata @ ~]
     =/  =metadata:reel  (fall (~(get by our-metadata) i.t.t.path) *metadata:reel)
-    ``json+!>((enjs-metadata metadata))
+    ``reel-metadata+!>(metadata)
   ==
 ::
 ++  on-arvo   on-arvo:def

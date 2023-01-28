@@ -84,10 +84,12 @@
     =+  !<([id=@ta inbound-request:eyre] vase)
     |^
     =/  line=request-line:server  (parse-request-line:server url.request)
+    =/  m=metadata:reel
+      .^(metadata:reel %gx [(scot %p our.bowl) %reel (scot %da now.bowl) %metadata token %noun ~])
     ?+    method.request  :_  this  (give not-found:gen:server)
         %'GET'
       =/  description
-        .^(cord %gx [(scot %p our.bowl) %reel (scot %da now.bowl) %description token %noun ~])
+        (fall (~(get by fields.m) 'description') '')
       :_  this  (give (manx-response:gen:server (landing-page token dm-text pals-tag description)))
         %'POST'
       ?~  body.request
@@ -95,9 +97,13 @@
       =/  params  ~(got by (frisk q.u.body.request))
       =/  bait
         .^(cord %gx [(scot %p our.bowl) %reel (scot %da now.bowl) %service %noun ~])
+      =/  new-meta=metadata:reel
+        [%greeting-0 (~(put by fields.m) 'description' (params 'description'))]
       :_  this(token (params 'token'), dm-text (params 'dm-text'), pals-tag (params 'pals-tag'))
-      :-  [%pass /describe %agent [our.bowl %reel] %poke %reel-describe !>([(params 'token') (params 'description')])]
-      (give (manx-response:gen:server (sent-page our.bowl bait token)))
+      :-  :*  %pass  /describe  %agent  [our.bowl %reel]  %poke  %reel-describe
+            !>([(params 'token') new-meta])
+          ==
+      (give (manx-response:gen:server (sent-page our.bowl bait (params 'token'))))
     ==
     ::
     ++  give
