@@ -1,14 +1,15 @@
 /-  reel
-/+  default-agent, verb, dbug
+/+  default-agent, verb, dbug, *reel
 |%
 +$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
+      state-1
   ==
 ::
 ::  vic: URL of bait service
 ::  civ: @p of bait service
-::  descriptions: map from tokens to their descriptions
+::  our-metadata: map from tokens to their metadata
 ::
 +$  state-0
   $:  %0
@@ -16,8 +17,14 @@
       civ=ship
       descriptions=(map cord cord)
   ==
++$  state-1
+  $:  %1
+      vic=@t
+      civ=ship
+      our-metadata=(map cord metadata:reel)
+  ==
 --
-=|  state-0
+=|  state-1
 =*  state  -
 ::
 %-  agent:dbug
@@ -35,8 +42,12 @@
   |=  old-state=vase
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
-  ?>  ?=(%0 -.old)
-  `this(state old)
+  ?-  -.old
+      %1
+    `this(state old)
+      %0
+    `this(state *state-1)
+  ==
 ::
 ++  on-poke
   |=  [=mark =vase]
@@ -45,27 +56,27 @@
       %reel-command
     ?>  =(our.bowl src.bowl)
     =+  !<(=command:reel vase)
-    `this(vic vic.command)
+    `this(vic vic.command, civ civ.command)
   ::
       %reel-bite
     =+  !<(=bite:reel vase)
     [[%give %fact ~[/bites] mark !>(bite)]~ this]
   ::
       %reel-describe
-    :_  this
-    =+  !<  [token=cord description=cord]  vase
-    ~[[%pass [%describe token description ~] %agent [civ %bait] %poke %bait-describe !>([token description])]]
+    =+  !<  [token=cord =metadata:reel]  vase
+    :_  this(our-metadata (~(put by our-metadata) token metadata))
+    ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token metadata])]]
   ==
 ::
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
   ?+  wire  (on-agent:def wire sign)
-      [%describe @ @ ~]
+      [%describe ~]
     ?+  -.sign  (on-agent:def wire sign)
         %poke-ack
       ?~  p.sign
-        `this(descriptions (~(put by descriptions) i.t.wire i.t.t.wire))
+        `this
       (on-agent:def wire sign)
     ==
   ==
@@ -84,8 +95,11 @@
   ^-  (unit (unit cage))
   ?+  path  [~ ~]
     [%x %service ~]  ``noun+!>(vic)
-    [%x %bait ~]  ``json+!>([%s vic])
-    [%x %description @ ~]  ``reel-description+!>((fall (~(get by descriptions) i.t.t.path) ''))
+    [%x %bait ~]  ``reel-bait+!>([vic civ])
+::
+      [%x %metadata @ ~]
+    =/  =metadata:reel  (fall (~(get by our-metadata) i.t.t.path) *metadata:reel)
+    ``json+!>((enjs-metadata metadata))
   ==
 ::
 ++  on-arvo   on-arvo:def
