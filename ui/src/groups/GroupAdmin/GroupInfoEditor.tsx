@@ -21,6 +21,7 @@ import {
   useLureEnabled,
   useLureWelcome,
   lurePokeDescribe,
+  useLureMetadataExists,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
@@ -53,6 +54,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
   const [lureWelcome, setLureWelcome] = useLureWelcome(name);
   const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
+  const lureMetadataExists = useLureMetadataExists(name, lureURL);
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -216,6 +218,32 @@ export default function GroupInfoEditor({ title }: ViewProps) {
             }}
           >
             {lureWelcomeSaveLabel}
+          </button>
+        </div>
+        <div
+          className={`flex flex-row ${
+              lureMetadataExists && lureEnabled
+                ? 'visible'
+                : 'hidden'
+            }`}
+        >
+          <label htmlFor="title" className="mt-2 font-bold">
+            Invite Link
+          </label>
+          <input
+            value={lureURL}
+            className="input mt-0"
+            type="text"
+            readOnly
+          />
+          <button
+            className="small-button mt-1 h-6 whitespace-nowrap"
+            onClick={() => {
+              navigator.clipboard.writeText(lureURL);
+              setCopyButtonLabel('Copied');
+            }}
+          >
+            {copyButtonLabel}
           </button>
         </div>
       </div>
