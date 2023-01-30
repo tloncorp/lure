@@ -1,5 +1,5 @@
 import api from '@/api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 
 export function useLureBait() {
@@ -29,6 +29,19 @@ export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
   });
 
   return [lureEnabled, setLureEnabled];
+}
+
+export function useLureMetadataExists(name: string, lureURL: string): boolean {
+  const [lureMetadataExists, setLureMetadataExists] = useState<boolean>(false);
+
+  // TODO handle CORS
+  useEffect(() => {
+    fetch(`${lureURL}/metadata.json`)
+      .then((response) => response.json())
+      .then((data) => setLureMetadataExists(!(data.tag === "")));
+  }, [name, lureURL]);
+
+  return lureMetadataExists;
 }
 
 export function useLureWelcome(name: string): [string, (s: string) => void] {
