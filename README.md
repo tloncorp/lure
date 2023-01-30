@@ -19,8 +19,8 @@ Prod Moon: ~litnec-dozzod-marzod, 35.238.247.180 [Litnec Monitoring](https://con
 http://bait-dev.tlon.io/~sampel-palnet/mytoken
 
 Globbing
-in lure/ui, run npm run build
-go to bait-dev.tlon.io/docket/upload
-upload lure/ui/dist
-|pass [%e %connect [~ /] %docket]
-:bait &bind-slash ~
+- in lure/ui, run npm run build
+- go to bait-dev.tlon.io/docket/upload
+- upload lure/ui/dist
+- |pass [%e %connect [~ /] %docket]
+- :bait &bind-slash ~
