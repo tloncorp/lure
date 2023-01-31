@@ -1,6 +1,7 @@
 |%
 +$  command
-  $%  [%set-service vic=@t civ=@p]
+  $%  [%set-service vic=@t]
+      [%set-ship civ=@p]
   ==
 ::
 +$  bite
