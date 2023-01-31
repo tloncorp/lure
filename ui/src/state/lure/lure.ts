@@ -31,17 +31,20 @@ export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
   return [lureEnabled, setLureEnabled];
 }
 
-export function useLureMetadataExists(name: string, lureURL: string): boolean {
+export function useLureMetadataExists(name: string, lureURL: string): [boolean, () => void] {
   const [lureMetadataExists, setLureMetadataExists] = useState<boolean>(false);
 
-  // TODO handle CORS
-  useEffect(() => {
-    fetch(`${lureURL}/metadata.json`)
-      .then((response) => response.json())
-      .then((data) => setLureMetadataExists(!(data.tag === "")));
-  }, [name, lureURL]);
+  function checkLureMetadataExists() {
+    api
+      .scry<{ tag: string; fields: any }>({
+        app: 'reel',
+        path: `/metadata/${name}`
+      }).then((result) => setLureMetadataExists(result.tag !== ""))
+  }
 
-  return lureMetadataExists;
+  useEffect(checkLureMetadataExists, [name, lureURL]);
+
+  return [lureMetadataExists, checkLureMetadataExists];
 }
 
 export function useLureWelcome(name: string): [string, (s: string) => void] {

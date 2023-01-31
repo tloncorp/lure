@@ -55,7 +55,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
   const [lureWelcome, setLureWelcome] = useLureWelcome(name);
   const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
-  const lureMetadataExists = useLureMetadataExists(name, lureURL);
+  const [lureMetadataExists, checkLureMetadataExists] = useLureMetadataExists(name, lureURL);
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -236,6 +236,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
                   image: group?.meta.image,
                 },
               });
+              checkLureMetadataExists();
               setLureWelcomeSaveLabel('Saved');
             }}
           >
