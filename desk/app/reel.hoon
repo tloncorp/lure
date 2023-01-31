@@ -114,7 +114,7 @@
   ?>  ?=([%set-ship ~] wire)
   ?>  ?=([%khan %arow *] sign)
   ?:  ?=(%.n -.p.sign)
-    ((slog leaf+<p.p.sign> ~) `this)
+    ((slog 'reel: fetch bait ship failed' p.p.sign) `this)
   `this
 ++  on-fail   on-fail:def
 --
