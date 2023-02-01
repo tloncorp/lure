@@ -88,22 +88,24 @@
     :_  this
     =/  full-line=request-line:server  (parse-request-line:server url.request)
     =/  line
-      ~&  site.full-line
       ?:  ?=([%lure @ @ *] site.full-line)
         t.site.full-line
       ?:  ?=([@ @ *] site.full-line)
         site.full-line
       !!
-    =/  inviter  (slav %p i.line)
-    =/  token  i.t.line
     ?+    method.request  (give not-found:gen:server)
         %'GET'
-      =/  =metadata:reel
-        (fall (~(get by token-metadata) [inviter token]) *metadata:reel)
+      ?:  ?=([%bait %who ~] line)
+        (give (json-response:gen:server s+(scot %p our.bowl)))
+      =/  inviter  (slav %p i.line)
+      =/  token  i.t.line
+      =/  =metadata:reel  (fall (~(get by token-metadata) [inviter token]) *metadata:reel)
       ?:  ?=([@ @ %metadata ~] line)
         (give (json-response:gen:server (enjs-metadata metadata)))
       (give (manx-response:gen:server (landing-page metadata)))
         %'POST'
+      =/  inviter  (slav %p i.line)
+      =/  token  i.t.line
       ?~  body.request
         (give not-found:gen:server)
       ?.  =('ship=%7E' (end [3 8] q.u.body.request))

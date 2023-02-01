@@ -10,7 +10,6 @@
     %.  j
     %-  ot:dejs:format
     :~  url+so:dejs:format
-        ship+(cu:dejs:format |=(=cord (slav %p cord)) so:dejs:format)
     ==
   --
 ++  grow

@@ -56,7 +56,13 @@
       %reel-command
     ?>  =(our.bowl src.bowl)
     =+  !<(=command:reel vase)
-    `this(vic vic.command, civ civ.command)
+    ?-  -.command
+        %set-service
+      :_  this(vic vic.command)
+      ~[[%pass /set-ship %arvo %k %fard q.byk.bowl %reel-set-ship %noun !>(vic)]]
+        %set-ship
+      `this(civ civ.command)
+    ==
   ::
       %reel-bite
     =+  !<(=bite:reel vase)
@@ -102,6 +108,13 @@
     ``reel-metadata+!>(metadata)
   ==
 ::
-++  on-arvo   on-arvo:def
+++  on-arvo
+  |=  [=wire sign=sign-arvo]
+  ^-  (quip card:agent:gall _this)
+  ?>  ?=([%set-ship ~] wire)
+  ?>  ?=([%khan %arow *] sign)
+  ?:  ?=(%.n -.p.sign)
+    ((slog 'reel: fetch bait ship failed' p.p.sign) `this)
+  `this
 ++  on-fail   on-fail:def
 --
