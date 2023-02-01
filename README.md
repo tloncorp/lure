@@ -16,7 +16,7 @@ Dev Moon: ~samnec-dozzod-marzod, 34.171.101.183 [Samnec Monitoring](https://cons
 
 Prod Moon: ~litnec-dozzod-marzod, 35.238.247.180 [Litnec Monitoring](https://console.cloud.google.com/compute/instancesDetail/zones/us-central1-a/instances/litnec-dozzod-marzod?project=mainnet-tlon-other-2d&pageState=(%22duration%22:(%22groupValue%22:%22PT1H%22,%22customValue%22:null))&tab=monitoring)
 
-http://bait-dev.tlon.io/~sampel-palnet/mytoken
+http://bait-dev.tlon.io/lure/~sampel-palnet/mytoken
 
 Globbing
 - in lure/ui, run npm run build
