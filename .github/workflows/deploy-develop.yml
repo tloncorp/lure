@@ -1,17 +1,18 @@
-name: Push to develop
+name: Deploy Hoon / Development
 
 on:
   push:
     branches:
       - develop
     paths:
+      - '.github/scripts/**.sh'
       - '.github/workflows/**.yml'
-      - '.github/workflows/scripts/**.sh'
       - 'desk/**'
 
 jobs:
   urbit:
-    uses: ./.github/workflows/shared.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       ship: 'samnec-dozzod-marzod'
+      branch: 'develop'
     secrets: inherit
