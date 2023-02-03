@@ -1,21 +1,30 @@
 /-  reel
-/+  default-agent, verb, dbug
+/+  default-agent, verb, dbug, *reel
 |%
 +$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
+      state-1
   ==
 ::
 ::  vic: URL of bait service
 ::  civ: @p of bait service
+::  our-metadata: map from tokens to their metadata
 ::
 +$  state-0
   $:  %0
       vic=@t
       civ=ship
+      descriptions=(map cord cord)
+  ==
++$  state-1
+  $:  %1
+      vic=@t
+      civ=ship
+      our-metadata=(map cord metadata:reel)
   ==
 --
-=|  state-0
+=|  state-1
 =*  state  -
 ::
 %-  agent:dbug
@@ -26,15 +35,19 @@
 ::
 ++  on-init
   ^-  (quip card _this)
-  `this(vic 'https://bait-dev.tlon.io/', civ ~samnec-dozzod-marzod)
+  `this(vic 'https://bait-dev.tlon.io/lure/', civ ~samnec-dozzod-marzod)
 ::
 ++  on-save  !>(state)
 ++  on-load
   |=  old-state=vase
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
-  ?>  ?=(%0 -.old)
-  `this(state old)
+  ?-  -.old
+      %1
+    `this(state old)
+      %0
+    `this(state *state-1)
+  ==
 ::
 ++  on-poke
   |=  [=mark =vase]
@@ -43,18 +56,37 @@
       %reel-command
     ?>  =(our.bowl src.bowl)
     =+  !<(=command:reel vase)
-    `this(vic vic.command)
+    ?-  -.command
+        %set-service
+      :_  this(vic vic.command)
+      ~[[%pass /set-ship %arvo %k %fard q.byk.bowl %reel-set-ship %noun !>(vic)]]
+        %set-ship
+      `this(civ civ.command)
+    ==
   ::
       %reel-bite
     =+  !<(=bite:reel vase)
     [[%give %fact ~[/bites] mark !>(bite)]~ this]
+  ::
       %reel-describe
-    :_  this
-    =+  !<  [token=cord description=cord]  vase
-    ~[[%pass /describe %agent [civ %bait] %poke %describe !>([token description])]]
+    =+  !<  [token=cord =metadata:reel]  vase
+    :_  this(our-metadata (~(put by our-metadata) token metadata))
+    ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token metadata])]]
   ==
 ::
-++  on-agent  on-agent:def
+++  on-agent
+  |=  [=wire =sign:agent:gall]
+  ^-  (quip card _this)
+  ?+  wire  (on-agent:def wire sign)
+      [%describe ~]
+    ?+  -.sign  (on-agent:def wire sign)
+        %poke-ack
+      ?~  p.sign
+        `this
+      (on-agent:def wire sign)
+    ==
+  ==
+::
 ++  on-watch
   |=  =path
   ^-  (quip card _this)
@@ -69,9 +101,20 @@
   ^-  (unit (unit cage))
   ?+  path  [~ ~]
     [%x %service ~]  ``noun+!>(vic)
-    [%x %bait ~]  ``json+!>([%s vic])
+    [%x %bait ~]  ``reel-bait+!>([vic civ])
+::
+      [%x %metadata @ ~]
+    =/  =metadata:reel  (fall (~(get by our-metadata) i.t.t.path) *metadata:reel)
+    ``reel-metadata+!>(metadata)
   ==
 ::
-++  on-arvo   on-arvo:def
+++  on-arvo
+  |=  [=wire sign=sign-arvo]
+  ^-  (quip card:agent:gall _this)
+  ?>  ?=([%set-ship ~] wire)
+  ?>  ?=([%khan %arow *] sign)
+  ?:  ?=(%.n -.p.sign)
+    ((slog 'reel: fetch bait ship failed' p.p.sign) `this)
+  `this
 ++  on-fail   on-fail:def
 --

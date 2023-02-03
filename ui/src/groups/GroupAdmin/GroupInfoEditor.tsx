@@ -16,12 +16,16 @@ import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useGroupName } from '@/state/groups/groups';
 import {
   useLureBait,
-  lurePokeDescription,
   lureEnableGroup,
   lureDisableGroup,
+  useLureEnabled,
+  useLureWelcome,
+  lurePokeDescribe,
+  useLureMetadataExists,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
+import CheckIcon from '@/components/icons/CheckIcon';
 
 const emptyMeta = {
   title: '',
@@ -46,14 +50,12 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const lureBait = useLureBait();
   const name = useGroupName();
   const lureToken = name;
-  const [lureEnabled, setLureEnabled] = useState(false);
+  const [lureEnabled, setLureEnabled] = useLureEnabled(name);
   const lureURL = `${lureBait}${window.our}/${lureToken}`;
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
-  const [lureDescription, setLureDescription] = useState(
-    'Write a welcome message for your group'
-  );
-  const [lureDescriptionSaveLabel, setLureDescriptionSaveLabel] =
-    useState('Save');
+  const [lureWelcome, setLureWelcome] = useLureWelcome(name);
+  const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
+  const [lureMetadataExists, checkLureMetadataExists] = useLureMetadataExists(name, lureURL);
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -171,28 +173,92 @@ export default function GroupInfoEditor({ title }: ViewProps) {
       </FormProvider>
       <div className="card mb-4">
         <div className="flex flex-row">
-          <label htmlFor="title" className="mt-1 font-bold">
-            Invite Links Enabled
+          <label
+            className={
+              'flex cursor-pointer items-start justify-between space-x-2 py-2'
+            }
+          >
+            <div className="flex items-center">
+              {lureEnabled ? (
+                <div className="flex h-4 w-4 items-center rounded-sm border-2 border-gray-400">
+                  <CheckIcon className="h-3 w-3 fill-gray-400" />
+                </div>
+              ) : (
+                <div className="h-4 w-4 rounded-sm border-2 border-gray-200" />
+              )}
+            </div>
+
+            <div className="flex w-full flex-col">
+              <div className="flex flex-row space-x-2">
+                <div className="flex w-full flex-col justify-start text-left">
+                  <span className="font-semibold">Invite Links Enabled</span>
+                </div>
+              </div>
+            </div>
+
+            <input
+              checked={lureEnabled}
+              onChange={async () => {
+                if (lureEnabled) {
+                  await lureDisableGroup(name);
+                } else {
+                  await lureEnableGroup(name);
+                }
+                setLureEnabled(!lureEnabled);
+              }}
+              className="sr-only"
+              type="checkbox"
+            />
           </label>
-          <input
-            checked={lureEnabled}
-            onChange={async () => {
-              if (lureEnabled) {
-                await lureDisableGroup(name);
-              } else {
-                await lureEnableGroup(name);
-              }
-              setLureEnabled(!lureEnabled);
-            }}
-            className="input icon-toggle ml-2"
-            type="checkbox"
-          />
         </div>
-        <div className={`flex flex-row ${lureEnabled ? 'visible' : 'hidden'}`}>
+        <div className={`flex flex-col ${lureEnabled ? 'visible' : 'hidden'}`}>
+          <label htmlFor="title" className="mt-2 font-bold">
+            Invite Description
+          </label>
+          <textarea
+            value={lureWelcome}
+            className="input mt-0"
+            onChange={(e) => {
+              setLureWelcome(e.target.value);
+              setLureWelcomeSaveLabel('Save');
+            }}
+          />
+          <button
+            className="button mt-2 whitespace-nowrap"
+            onClick={async () => {
+              await lurePokeDescribe(name, {
+                tag: 'groups-0',
+                fields: {
+                  welcome: lureWelcome,
+                  description: group?.meta.description,
+                  cover: group?.meta.cover,
+                  title: group?.meta.title,
+                  image: group?.meta.image,
+                },
+              });
+              checkLureMetadataExists();
+              setLureWelcomeSaveLabel('Saved');
+            }}
+          >
+            {lureWelcomeSaveLabel}
+          </button>
+        </div>
+        <div
+          className={`flex flex-row ${
+              lureMetadataExists && lureEnabled
+                ? 'visible'
+                : 'hidden'
+            }`}
+        >
           <label htmlFor="title" className="mt-2 font-bold">
             Invite Link
           </label>
-          <input value={lureURL} className="input mt-0" type="text" readOnly />
+          <input
+            value={lureURL}
+            className="input mt-0"
+            type="text"
+            readOnly
+          />
           <button
             className="small-button mt-1 h-6 whitespace-nowrap"
             onClick={() => {
@@ -201,29 +267,6 @@ export default function GroupInfoEditor({ title }: ViewProps) {
             }}
           >
             {copyButtonLabel}
-          </button>
-        </div>
-        <div className={`flex flex-col ${lureEnabled ? 'visible' : 'hidden'}`}>
-          <label htmlFor="title" className="mt-2 font-bold">
-            Invite Description
-          </label>
-          <textarea
-            value={lureDescription}
-            className="input mt-0"
-            onChange={(e) => {
-              setLureDescription(e.target.value);
-              setLureDescriptionSaveLabel('Save');
-            }}
-          />
-          <button
-            className="button mt-2 whitespace-nowrap"
-            onClick={async () => {
-              // TODO poke lure bait to set description
-              await lurePokeDescription(name, lureDescription);
-              setLureDescriptionSaveLabel('Saved');
-            }}
-          >
-            {lureDescriptionSaveLabel}
           </button>
         </div>
       </div>

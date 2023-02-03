@@ -1,0 +1,17 @@
+name: Push to master
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/**.yml'
+      - '.github/workflows/scripts/**.sh'
+      - 'desk/**'
+
+jobs:
+  urbit:
+    uses: ./.github/workflows/shared.yml
+    with:
+      ship: 'litnec-dozzod-marzod'
+    secrets: inherit

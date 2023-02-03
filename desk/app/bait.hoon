@@ -1,27 +1,35 @@
 /-  reel
-/+  default-agent, verb, dbug, server
+/+  default-agent, verb, dbug, server, *reel
 |%
 +$  card  card:agent:gall
 +$  versioned-state
   $%  state-0
+      state-1
   ==
 ::
 +$  state-0
   $:  %0
       todd=(map [inviter=ship token=cord] description=cord)
   ==
++$  state-1
+  $:  %1
+      token-metadata=(map [inviter=ship token=cord] metadata:reel)
+  ==
 --
 ::
 |%
 ++  landing-page
-  |=  description=cord
+  |=  =metadata:reel
   ^-  manx
+  =/  description
+    ?.  =(tag.metadata 'groups-0')  ""
+    (trip (~(got by fields.metadata) 'description'))
   ;html
     ;head
       ;title:"Lure"
     ==
     ;body
-      ;p: description: {<(trip description)>}
+      ;p: {description}
       Enter your @p:
       ;form(method "post")
         ;input(type "text", name "ship", id "ship", placeholder "~sampel");
@@ -45,7 +53,7 @@
   ==
 --
 ::
-=|  state-0
+=|  state-1
 =*  state  -
 ::
 %-  agent:dbug
@@ -63,8 +71,12 @@
   |=  old-state=vase
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
-  ?>  ?=(%0 -.old)
-  `this(state old)
+  ?-  -.old
+      %1
+    `this(state old)
+      %0
+    `this(state *state-1)
+  ==
 ::
 ++  on-poke
   |=  [=mark =vase]
@@ -74,24 +86,26 @@
     =+  !<([id=@ta inbound-request:eyre] vase)
     |^
     :_  this
-    =/  line=request-line:server  (parse-request-line:server url.request)
-    =/  inviter
-      ?:  ?=([[~ [%lure @ @ ~]] ~] line)
-        (slav %p i.t.site.line)
-      ?:  ?=([[~ [@ @ ~]] ~] line)
-        (slav %p i.site.line)
-      !!
-    =/  token
-      ?:  ?=([[~ [%lure @ @ ~]] ~] line)
-        i.t.t.site.line
-      ?:  ?=([[~ [@ @ ~]] ~] line)
-        i.t.site.line
+    =/  full-line=request-line:server  (parse-request-line:server url.request)
+    =/  line
+      ?:  ?=([%lure @ @ *] site.full-line)
+        t.site.full-line
+      ?:  ?=([@ @ *] site.full-line)
+        site.full-line
       !!
     ?+    method.request  (give not-found:gen:server)
         %'GET'
-      =/  description  (fall (~(get by todd) [inviter token]) '')
-      (give (manx-response:gen:server (landing-page description)))
+      ?:  ?=([%bait %who ~] line)
+        (give (json-response:gen:server s+(scot %p our.bowl)))
+      =/  inviter  (slav %p i.line)
+      =/  token  i.t.line
+      =/  =metadata:reel  (fall (~(get by token-metadata) [inviter token]) *metadata:reel)
+      ?:  ?=([@ @ %metadata ~] line)
+        (give (json-response:gen:server (enjs-metadata metadata)))
+      (give (manx-response:gen:server (landing-page metadata)))
         %'POST'
+      =/  inviter  (slav %p i.line)
+      =/  token  i.t.line
       ?~  body.request
         (give not-found:gen:server)
       ?.  =('ship=%7E' (end [3 8] q.u.body.request))
@@ -107,13 +121,13 @@
       |=  =simple-payload:http
       (give-simple-payload:app:server id simple-payload)
     --
-      %describe
-    =+  !<([token=cord description=cord] vase)
-    `this(todd (~(put by todd) [src.bowl token] description))
-  ::g
-      %undescribe
+      %bait-describe
+    =+  !<([token=cord =metadata:reel] vase)
+    `this(token-metadata (~(put by token-metadata) [src.bowl token] metadata))
+  ::
+      %bait-undescribe
     =+  !<(token=cord vase)
-    `this(todd (~(del by todd) [src.bowl token]))
+    `this(token-metadata (~(del by token-metadata) [src.bowl token]))
       %bind-slash
     :_  this
     ~[[%pass /eyre/connect %arvo %e %connect [~ /] dap.bowl]]

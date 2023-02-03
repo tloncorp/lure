@@ -1,27 +1,76 @@
 import api from '@/api';
 import { useState, useEffect } from 'react';
+import { useEffectOnce } from 'usehooks-ts';
 
 export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
-  useEffect(() => {
+  useEffectOnce(() => {
     api
-      .scry<string>({
+      .scry<{ url: string; ship: string }>({
         app: 'reel',
         path: '/bait',
       })
-      .then((result) => setLureBait(result));
+      .then((result) => setLureBait(result.url));
   });
 
   return lureBait;
 }
 
-export async function lurePokeDescription(token: string, description: string) {
+export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
+  const [lureEnabled, setLureEnabled] = useState<boolean>(false);
+
+  useEffectOnce(() => {
+    api
+      .scry<boolean>({
+        app: 'grouper',
+        path: `/enabled/${name}`,
+      })
+      .then((result) => setLureEnabled(result));
+  });
+
+  return [lureEnabled, setLureEnabled];
+}
+
+export function useLureMetadataExists(name: string, lureURL: string): [boolean, () => void] {
+  const [lureMetadataExists, setLureMetadataExists] = useState<boolean>(false);
+
+  function checkLureMetadataExists() {
+    api
+      .scry<{ tag: string; fields: any }>({
+        app: 'reel',
+        path: `/metadata/${name}`
+      }).then((result) => setLureMetadataExists(result.tag !== ""))
+  }
+
+  useEffect(checkLureMetadataExists, [name, lureURL]);
+
+  return [lureMetadataExists, checkLureMetadataExists];
+}
+
+export function useLureWelcome(name: string): [string, (s: string) => void] {
+  const [lureWelcome, setLureWelcome] = useState<string>(
+    'Write a welcome message for your group'
+  );
+
+  useEffectOnce(() => {
+    api
+      .scry<{ tag: string; fields: any }>({
+        app: 'reel',
+        path: `/metadata/${name}`,
+      })
+      .then((result) => setLureWelcome(result.fields.welcome));
+  });
+
+  return [lureWelcome, setLureWelcome];
+}
+
+export async function lurePokeDescribe(token: string, metadata: any) {
   await api.poke({
     app: 'reel',
     mark: 'reel-describe',
     json: {
       token,
-      description,
+      metadata,
     },
   });
 }
