@@ -6,6 +6,7 @@ set -o pipefail
 SHIP=$1
 BRANCH=$2
 
+# XX: Do we need '--ignore-existing' opts for dev rsyncs?
 CMD_FILE=`mktemp --tmpdir "lure.XXXXXX"`
 CMDS='
 LURE_PATH="'$SHIP'/lure"
@@ -20,6 +21,8 @@ git clone --depth=1 --branch master https://github.com/tloncorp/landscape.git $L
 
 curl -s --data '"'"'{"source":{"dojo":"+hood/mount %lure"},"sink":{"app":"hood"}}'"'"' http://localhost:12321 > /dev/null
 
+rsync -avL "$LURE_PATH/desk.docket-0" "$SOURCE_REPO/desk/"
+
 rsync -avL --delete "$SOURCE_REPO/desk/" $LURE_PATH
 rsync -avL "$URBIT_REPO/pkg/base-dev/" $LURE_PATH
 rsync -avL "$LANDSCAPE_REPO/desk-dev/lib/docket.hoon" "$LURE_PATH/lib"
@@ -33,7 +36,7 @@ rm -rf $SOURCE_REPO
 rm -rf $URBIT_REPO
 rm -rf $LANDSCAPE_REPO
 '
-echo "$CMDS" >> $CMD_FILE
+echo "$CMDS" >> "$CMD_FILE"
 
 gcloud compute ssh \
   --internal-ip \
@@ -43,4 +46,4 @@ gcloud compute ssh \
   --command "$(sed '/^$/d' $CMD_FILE | sed ':a;N;s/\n/ && /;$!ba')" \
   $GCP_USER@$SHIP
 
-echo "%lure OTA performed for $SHIP"
+echo "%lure deploy performed for $SHIP"
