@@ -1,15 +1,15 @@
-name: Deploy Hoon / Production
+name: Upload Glob / Production
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'desk/**'
+      - 'ui/**'
 
 jobs:
   urbit:
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/glob.yml
     with:
       ship: 'litnec-dozzod-marzod'
       password: 'SHIP_PASSWORD_PROD'

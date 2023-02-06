@@ -60,14 +60,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - id: 'deploy'
-        name: 'SSH and sync desk'
-        run: ./.github/scripts/deploy.sh ${{ inputs.ship }} ${{ inputs.branch }}
-        env:
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
-          GCP_ZONE: ${{ secrets.GCP_ZONE }}
-          GCP_USER: ${{ secrets.GCP_USER }}
-
       - id: 'node-setup'
         name: 'Setup Node.js'
         uses: actions/setup-node@v3

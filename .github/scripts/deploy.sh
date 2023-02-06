@@ -21,8 +21,6 @@ git clone --depth=1 --branch master https://github.com/tloncorp/landscape.git $L
 
 curl -s --data '"'"'{"source":{"dojo":"+hood/mount %lure"},"sink":{"app":"hood"}}'"'"' http://localhost:12321 > /dev/null
 
-rsync -avL "$LURE_PATH/desk.docket-0" "$SOURCE_REPO/desk/"
-
 rsync -avL --delete "$SOURCE_REPO/desk/" $LURE_PATH
 rsync -avL "$URBIT_REPO/pkg/base-dev/" $LURE_PATH
 rsync -avL "$LANDSCAPE_REPO/desk-dev/lib/docket.hoon" "$LURE_PATH/lib"
@@ -46,4 +44,4 @@ gcloud compute ssh \
   --command "$(sed '/^$/d' $CMD_FILE | sed ':a;N;s/\n/ && /;$!ba')" \
   $GCP_USER@$SHIP
 
-echo "%lure deploy performed for $SHIP"
+echo "%lure desk deployed to $SHIP"
