@@ -13,6 +13,5 @@ jobs:
     with:
       ship: 'samnec-dozzod-marzod'
       password: 'SHIP_PASSWORD_DEV'
-      branch: 'develop'
       url: 'bait-dev.tlon.io'
     secrets: inherit

@@ -12,5 +12,4 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       ship: 'litnec-dozzod-marzod'
-      branch: 'master'
     secrets: inherit

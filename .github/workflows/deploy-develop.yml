@@ -12,5 +12,4 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       ship: 'samnec-dozzod-marzod'
-      branch: 'develop'
     secrets: inherit

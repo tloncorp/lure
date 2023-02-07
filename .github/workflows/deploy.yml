@@ -6,11 +6,6 @@ on:
         type: string
         default: false
         required: true
-      branch:
-        description: 'Branch to deploy'
-        type: string
-        default: false
-        required: true
     secrets:
       GCP_CREDENTIALS:
         required: true
@@ -45,7 +40,7 @@ jobs:
 
       - id: 'deploy'
         name: 'SSH and sync desk'
-        run: ./.github/scripts/deploy.sh ${{ inputs.ship }} ${{ inputs.branch }}
+        run: ./.github/scripts/deploy.sh ${{ inputs.ship }} ${{ github.ref_name }}
         env:
           GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
           GCP_ZONE: ${{ secrets.GCP_ZONE }}

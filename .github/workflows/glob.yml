@@ -11,11 +11,6 @@ on:
         type: string
         default: false
         required: true
-      branch:
-        description: 'Branch to deploy'
-        type: string
-        default: false
-        required: true
       url:
         description: 'Ship DNS'
         type: string
@@ -80,7 +75,7 @@ jobs:
 
       - id: 'glob'
         name: 'SSH and glob frontend'
-        run: ./.github/scripts/glob.sh ${{ inputs.ship }} ${{ secrets[inputs.password] }} ${{ inputs.branch }} $FRONTEND_DIR ${{ inputs.url }}
+        run: ./.github/scripts/glob.sh ${{ inputs.ship }} ${{ secrets[inputs.password] }} ${{ github.ref_name }} $FRONTEND_DIR ${{ inputs.url }}
         env:
           GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
           GCP_ZONE: ${{ secrets.GCP_ZONE }}
