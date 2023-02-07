@@ -9,7 +9,6 @@ BRANCH=$3
 DIR=$4
 URL=$5
 
-# XX: Do we need '--ignore-existing' opts for dev rsyncs?
 CMD_FILE=`mktemp --tmpdir "lure.XXXXXX"`
 CMDS='
 COOKIE_JAR=`mktemp --tmpdir "lure-cookie.XXXXXX"`

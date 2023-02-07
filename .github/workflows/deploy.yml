@@ -6,18 +6,8 @@ on:
         type: string
         default: false
         required: true
-      password:
-        description: 'Password for ship'
-        type: string
-        default: false
-        required: true
       branch:
         description: 'Branch to deploy'
-        type: string
-        default: false
-        required: true
-      url:
-        description: 'Ship DNS'
         type: string
         default: false
         required: true
@@ -30,15 +20,8 @@ on:
         required: true
       GCP_ZONE:
         required: true
-      SHIP_PASSWORD_DEV:
-        required: true
-      SHIP_PASSWORD_PROD:
-        required: true
       TAILSCALE_AUTHKEY:
         required: true
-
-env:
-  FRONTEND_DIR: lure-frontend
 
 jobs:
   upload:
@@ -63,32 +46,6 @@ jobs:
       - id: 'deploy'
         name: 'SSH and sync desk'
         run: ./.github/scripts/deploy.sh ${{ inputs.ship }} ${{ inputs.branch }}
-        env:
-          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
-          GCP_ZONE: ${{ secrets.GCP_ZONE }}
-          GCP_USER: ${{ secrets.GCP_USER }}
-
-      - id: 'node-setup'
-        name: 'Setup Node.js'
-        uses: actions/setup-node@v3
-        with:
-          node-version: 19.6
-
-      - id: 'node-depends'
-        name: 'Install Node dependencies'
-        run: cd ui && npm install
-
-      - id: 'node-build'
-        name: 'Build frontend'
-        run: cd ui && npm run build
-
-      - id: 'upload'
-        name: 'Upload frontend to ship'
-        run: gcloud compute scp --internal-ip --project="${{ secrets.GCP_PROJECT }}" --zone="${{ secrets.GCP_ZONE }}" --recurse ./ui/dist ${{ secrets.GCP_USER }}@${{ inputs.SHIP }}:~/$FRONTEND_DIR
-
-      - id: 'glob'
-        name: 'SSH and glob frontend'
-        run: ./.github/scripts/glob.sh ${{ inputs.ship }} ${{ secrets[inputs.password] }} ${{ inputs.branch }} $FRONTEND_DIR ${{ inputs.url }}
         env:
           GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
           GCP_ZONE: ${{ secrets.GCP_ZONE }}

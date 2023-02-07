@@ -12,7 +12,5 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       ship: 'litnec-dozzod-marzod'
-      password: 'SHIP_PASSWORD_PROD'
       branch: 'master'
-      url: 'bait.tlon.io'
     secrets: inherit
