@@ -1,0 +1,17 @@
+name: Upload Glob / Development
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'ui/**'
+
+jobs:
+  urbit:
+    uses: ./.github/workflows/glob.yml
+    with:
+      ship: 'samnec-dozzod-marzod'
+      password: 'SHIP_PASSWORD_DEV'
+      url: 'bait-dev.tlon.io'
+    secrets: inherit

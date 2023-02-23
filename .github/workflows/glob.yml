@@ -1,0 +1,82 @@
+on:
+  workflow_call:
+    inputs:
+      ship:
+        description: 'Name of ship/GCP instance'
+        type: string
+        default: false
+        required: true
+      password:
+        description: 'Password for ship'
+        type: string
+        default: false
+        required: true
+      url:
+        description: 'Ship DNS'
+        type: string
+        default: false
+        required: true
+    secrets:
+      GCP_CREDENTIALS:
+        required: true
+      GCP_PROJECT:
+        required: true
+      GCP_USER:
+        required: true
+      GCP_ZONE:
+        required: true
+      SHIP_PASSWORD_DEV:
+        required: true
+      SHIP_PASSWORD_PROD:
+        required: true
+      TAILSCALE_AUTHKEY:
+        required: true
+
+env:
+  FRONTEND_DIR: lure-frontend
+
+jobs:
+  upload:
+    runs-on: 'ubuntu-latest'
+    name: 'Deploy Hoon files to ship'
+
+    steps:
+      - uses: 'actions/checkout@v3'
+
+      - id: 'tailscale'
+        name: 'Login to Tailscale'
+        uses: 'tailscale/github-action@v1'
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - id: 'gcp-auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - id: 'node-setup'
+        name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19.6
+
+      - id: 'node-depends'
+        name: 'Install Node dependencies'
+        run: cd ui && npm install
+
+      - id: 'node-build'
+        name: 'Build frontend'
+        run: cd ui && npm run build
+
+      - id: 'upload'
+        name: 'Upload frontend to ship'
+        run: gcloud compute scp --internal-ip --project="${{ secrets.GCP_PROJECT }}" --zone="${{ secrets.GCP_ZONE }}" --recurse ./ui/dist ${{ secrets.GCP_USER }}@${{ inputs.SHIP }}:~/$FRONTEND_DIR
+
+      - id: 'glob'
+        name: 'SSH and glob frontend'
+        run: ./.github/scripts/glob.sh ${{ inputs.ship }} ${{ secrets[inputs.password] }} ${{ github.ref_name }} $FRONTEND_DIR ${{ inputs.url }}
+        env:
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          GCP_ZONE: ${{ secrets.GCP_ZONE }}
+          GCP_USER: ${{ secrets.GCP_USER }}

@@ -1,17 +1,15 @@
-name: Push to master
+name: Deploy Hoon / Production
 
 on:
   push:
     branches:
       - master
     paths:
-      - '.github/workflows/**.yml'
-      - '.github/workflows/scripts/**.sh'
       - 'desk/**'
 
 jobs:
   urbit:
-    uses: ./.github/workflows/shared.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       ship: 'litnec-dozzod-marzod'
     secrets: inherit

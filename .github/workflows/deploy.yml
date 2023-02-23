@@ -21,7 +21,7 @@ on:
 jobs:
   upload:
     runs-on: 'ubuntu-latest'
-    name: 'Sync files to ship'
+    name: 'Deploy Hoon files to ship'
 
     steps:
       - uses: 'actions/checkout@v3'
@@ -38,6 +38,10 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: 'SSH and sync'
-        run: |
-          gcloud compute ssh --internal-ip --project ${{ secrets.GCP_PROJECT }} --zone ${{ secrets.GCP_ZONE }} --command './commands/sync.sh' ${{ secrets.GCP_USER }}@${{ inputs.ship }}
+      - id: 'deploy'
+        name: 'SSH and sync desk'
+        run: ./.github/scripts/deploy.sh ${{ inputs.ship }} ${{ github.ref_name }}
+        env:
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+          GCP_ZONE: ${{ secrets.GCP_ZONE }}
+          GCP_USER: ${{ secrets.GCP_USER }}

@@ -1,0 +1,17 @@
+name: Upload Glob / Production
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'ui/**'
+
+jobs:
+  urbit:
+    uses: ./.github/workflows/glob.yml
+    with:
+      ship: 'litnec-dozzod-marzod'
+      password: 'SHIP_PASSWORD_PROD'
+      url: 'bait.tlon.io'
+    secrets: inherit
