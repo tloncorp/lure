@@ -13,9 +13,7 @@ import LeaveIcon from '@/components/icons/LeaveIcon';
 import useIsGroupUnread from '@/logic/useIsGroupUnread';
 import UnreadIndicator from '@/components/Sidebar/UnreadIndicator';
 import { citeToPath, useCopy } from '@/logic/utils';
-import {
-  useGroupInviteUrl,
-} from '@/state/lure/lure';
+import { useGroupInviteUrl, useLureEnabled } from '@/state/lure/lure';
 
 const { ship } = window;
 
@@ -26,8 +24,10 @@ export function useGroupActions(flag: string) {
   const pinned = usePinnedGroups();
   const isPinned = Object.keys(pinned).includes(flag);
   const [groupInviteUrl] = useGroupInviteUrl(flag);
-  const [groupInviteUrlText, setGroupInviteUrlText] = useState('Copy Invite URL');
+  const [groupInviteUrlText, setGroupInviteUrlText] =
+    useState('Copy Invite URL');
   const doCopyInviteUrlText = useCopy(groupInviteUrl).doCopy;
+  const [lureEnabled] = useLureEnabled(flag.split('/')[1]);
 
   const onCopy = useCallback(() => {
     doCopy();
@@ -66,6 +66,7 @@ export function useGroupActions(flag: string) {
     groupInviteUrl,
     groupInviteUrlText,
     onInviteUrl,
+    lureEnabled,
   };
 }
 
@@ -80,8 +81,18 @@ const GroupActions = React.memo(
     const location = useLocation();
     const hasActivity = isGroupUnread(flag);
 
-    const { isOpen, setIsOpen, isPinned, copyItemText, onCopy, onPinClick, groupInviteUrlText, onInviteUrl, groupInviteUrl } =
-      useGroupActions(flag);
+    const {
+      isOpen,
+      setIsOpen,
+      isPinned,
+      copyItemText,
+      onCopy,
+      onPinClick,
+      groupInviteUrlText,
+      onInviteUrl,
+      groupInviteUrl,
+      lureEnabled,
+    } = useGroupActions(flag);
 
     const onInviteUrlSelect = useCallback(
       (event: Event) => {
@@ -140,7 +151,7 @@ const GroupActions = React.memo(
             </DropdownMenu.Item>
             <DropdownMenu.Item
               className={
-              'dropdown-item flex items-center space-x-2 text-blue hover:bg-blue-soft hover:dark:bg-blue-900'
+                'dropdown-item flex items-center space-x-2 text-blue hover:bg-blue-soft hover:dark:bg-blue-900'
               }
               onSelect={onCopySelect}
             >
@@ -148,9 +159,9 @@ const GroupActions = React.memo(
               <span className="pr-2">{copyItemText}</span>
             </DropdownMenu.Item>
             <DropdownMenu.Item
-              className={
-              `dropdown-item flex items-center space-x-2 text-blue hover:bg-blue-soft hover:dark:bg-blue-900${groupInviteUrl === '' ? ' hidden' : ''}`
-              }
+              className={`dropdown-item flex items-center space-x-2 text-blue hover:bg-blue-soft hover:dark:bg-blue-900${
+                groupInviteUrl === '' || !lureEnabled ? ' hidden' : ''
+              }`}
               onSelect={onInviteUrlSelect}
             >
               <LinkIcon16 className="h-6 w-6 opacity-60" />
