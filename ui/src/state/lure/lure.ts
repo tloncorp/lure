@@ -64,6 +64,21 @@ export function useLureWelcome(name: string): [string, (s: string) => void] {
   return [lureWelcome, setLureWelcome];
 }
 
+export function useGroupInviteUrl(flag: string): [string, () => void] {
+  const [url, setUrl] = useState<string>('');
+
+  function checkInviteUrl() {
+    api.subscribeOnce('reel', `/token-link/${flag}`, 20000)
+       .then((result) => {
+         setUrl(result);
+       });
+  }
+
+  useEffectOnce(checkInviteUrl);
+
+  return [url, checkInviteUrl];
+}
+
 export async function lurePokeDescribe(token: string, metadata: any) {
   await api.poke({
     app: 'reel',

@@ -22,6 +22,7 @@ import {
   useLureWelcome,
   lurePokeDescribe,
   useLureMetadataExists,
+  useGroupInviteUrl,
 } from '@/state/lure/lure';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
@@ -47,11 +48,9 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [status, setStatus] = useState<Status>('initial');
   const [deleteStatus, setDeleteStatus] = useState<Status>('initial');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const lureBait = useLureBait();
   const name = useGroupName();
-  const lureToken = name;
   const [lureEnabled, setLureEnabled] = useLureEnabled(name);
-  const lureURL = `${lureBait}${window.our}/${lureToken}`;
+  const [lureURL, checkLureURL] = useGroupInviteUrl(groupFlag);
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
   const [lureWelcome, setLureWelcome] = useLureWelcome(name);
   const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
@@ -175,7 +174,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
         <div className="flex flex-row">
           <label
             className={
-              'flex cursor-pointer items-start justify-between space-x-2 py-2'
+            'flex cursor-pointer items-start justify-between space-x-2 py-2'
             }
           >
             <div className="flex items-center">
@@ -236,6 +235,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
                   image: group?.meta.image,
                 },
               });
+              checkLureURL();
               checkLureMetadataExists();
               setLureWelcomeSaveLabel('Saved');
             }}

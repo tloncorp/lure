@@ -23,6 +23,9 @@
       civ=ship
       our-metadata=(map cord metadata:reel)
   ==
+++  url-for-token
+  |=  [vic=cord our=ship token=cord]
+  (crip "{(trip vic)}{(trip (scot %p our))}/{(trip token)}")
 --
 =|  state-1
 =*  state  -
@@ -69,9 +72,22 @@
     [[%give %fact ~[/bites] mark !>(bite)]~ this]
   ::
       %reel-describe
-    =+  !<  [token=cord =metadata:reel]  vase
+    =+  !<([token=cord =metadata:reel] vase)
     :_  this(our-metadata (~(put by our-metadata) token metadata))
     ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token metadata])]]
+      %reel-want-token-link
+    =+  !<(token=cord vase)
+    :_  this
+    =/  result=(unit [ship cord cord])
+      ?.  (~(has by our-metadata) token)  ~
+    `[our.bowl token (url-for-token vic our.bowl token)]
+    ~[[%pass /token-link/want %agent [src.bowl %reel] %poke %reel-give-token-link !>(result)]]
+      %reel-give-token-link
+    =+  !<(result=(unit [ship cord cord]) vase)
+    ?~  result  `this
+    =/  [host=ship token=cord url=cord]  (need result)
+    :_  this
+    ~[[%give %fact ~[[%token-link (scot %p host) token ~]] %json !>(s+url)]]
   ==
 ::
 ++  on-agent
@@ -93,6 +109,9 @@
   ?>  =(our.bowl src.bowl)
   ?+  path  (on-watch:def path)
     [%bites ~]  `this
+      [%token-link @ @ ~]
+    :_  this
+    ~[[%pass path %agent [(need (slaw %p i.t.path)) %reel] %poke %reel-want-token-link !>(i.t.t.path)]]
   ==
 ::
 ++  on-leave  on-leave:def
