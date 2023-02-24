@@ -34,11 +34,26 @@
       %grouper-disable
     =+  !<(name=cord vase)
     `this(enabled-groups (~(del in enabled-groups) name))
+      %grouper-ask-enabled
+    =+  !<(name=cord vase)
+    =/  enabled  (~(has in enabled-groups) name)
+    :_  this
+    ~[[%pass /ask %agent [src.bowl %grouper] %poke %grouper-answer-enabled !>([our.bowl name enabled])]]
+      %grouper-answer-enabled
+    =/  [host=ship name=cord enabled=?]  !<([ship cord ?] vase)
+    :_  this
+    ~[[%give %fact ~[[%group-enabled (scot %p host) name ~]] %json !>(b+enabled)]]
   ==
 ::
 ++  on-watch
   |=  =path
-  (on-watch:def +<)
+  ^-  (quip card _this)
+  ?>  =(our.bowl src.bowl)
+  ?+  path  (on-watch:def path)
+      [%group-enabled @ @ ~]
+    :_  this
+    ~[[%pass path %agent [(need (slaw %p i.t.path)) %grouper] %poke %grouper-ask-enabled !>(i.t.t.path)]]
+  ==
 ::
 ++  on-agent
   |=  [=wire =sign:agent:gall]

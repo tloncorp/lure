@@ -24,9 +24,9 @@ import {
   useLureMetadataExists,
   useGroupInviteUrl,
 } from '@/state/lure/lure';
+import CheckIcon from '@/components/icons/CheckIcon';
 import GroupInfoFields from '../GroupInfoFields';
 import PrivacySelector from '../PrivacySelector';
-import CheckIcon from '@/components/icons/CheckIcon';
 
 const emptyMeta = {
   title: '',
@@ -49,12 +49,15 @@ export default function GroupInfoEditor({ title }: ViewProps) {
   const [deleteStatus, setDeleteStatus] = useState<Status>('initial');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const name = useGroupName();
-  const [lureEnabled, setLureEnabled] = useLureEnabled(name);
+  const [lureEnabled, setLureEnabled] = useLureEnabled(groupFlag);
   const [lureURL, checkLureURL] = useGroupInviteUrl(groupFlag);
   const [copyButtonLabel, setCopyButtonLabel] = useState('Copy');
   const [lureWelcome, setLureWelcome] = useLureWelcome(name);
   const [lureWelcomeSaveLabel, setLureWelcomeSaveLabel] = useState('Save');
-  const [lureMetadataExists, checkLureMetadataExists] = useLureMetadataExists(name, lureURL);
+  const [lureMetadataExists, checkLureMetadataExists] = useLureMetadataExists(
+    name,
+    lureURL
+  );
 
   const form = useForm<GroupFormSchema>({
     defaultValues: {
@@ -174,7 +177,7 @@ export default function GroupInfoEditor({ title }: ViewProps) {
         <div className="flex flex-row">
           <label
             className={
-            'flex cursor-pointer items-start justify-between space-x-2 py-2'
+              'flex cursor-pointer items-start justify-between space-x-2 py-2'
             }
           >
             <div className="flex items-center">
@@ -245,20 +248,13 @@ export default function GroupInfoEditor({ title }: ViewProps) {
         </div>
         <div
           className={`flex flex-row ${
-              lureMetadataExists && lureEnabled
-                ? 'visible'
-                : 'hidden'
-            }`}
+            lureMetadataExists && lureEnabled ? 'visible' : 'hidden'
+          }`}
         >
           <label htmlFor="title" className="mt-2 font-bold">
             Invite Link
           </label>
-          <input
-            value={lureURL}
-            className="input mt-0"
-            type="text"
-            readOnly
-          />
+          <input value={lureURL} className="input mt-0" type="text" readOnly />
           <button
             className="small-button mt-1 h-6 whitespace-nowrap"
             onClick={() => {

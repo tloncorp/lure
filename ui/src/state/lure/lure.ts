@@ -16,30 +16,31 @@ export function useLureBait() {
   return lureBait;
 }
 
-export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
+export function useLureEnabled(flag: string): [boolean, (b: boolean) => void] {
   const [lureEnabled, setLureEnabled] = useState<boolean>(false);
 
   useEffectOnce(() => {
     api
-      .scry<boolean>({
-        app: 'grouper',
-        path: `/enabled/${name}`,
-      })
+      .subscribeOnce('grouper', `/group-enabled/${flag}`, 20000)
       .then((result) => setLureEnabled(result));
   });
 
   return [lureEnabled, setLureEnabled];
 }
 
-export function useLureMetadataExists(name: string, lureURL: string): [boolean, () => void] {
+export function useLureMetadataExists(
+  name: string,
+  lureURL: string
+): [boolean, () => void] {
   const [lureMetadataExists, setLureMetadataExists] = useState<boolean>(false);
 
   function checkLureMetadataExists() {
     api
       .scry<{ tag: string; fields: any }>({
         app: 'reel',
-        path: `/metadata/${name}`
-      }).then((result) => setLureMetadataExists(result.tag !== ""))
+        path: `/metadata/${name}`,
+      })
+      .then((result) => setLureMetadataExists(result.tag !== ''));
   }
 
   useEffect(checkLureMetadataExists, [name, lureURL]);
@@ -68,10 +69,9 @@ export function useGroupInviteUrl(flag: string): [string, () => void] {
   const [url, setUrl] = useState<string>('');
 
   function checkInviteUrl() {
-    api.subscribeOnce('reel', `/token-link/${flag}`, 20000)
-       .then((result) => {
-         setUrl(result);
-       });
+    api.subscribeOnce('reel', `/token-link/${flag}`, 20000).then((result) => {
+      setUrl(result);
+    });
   }
 
   useEffectOnce(checkInviteUrl);

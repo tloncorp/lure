@@ -27,7 +27,7 @@ export function useGroupActions(flag: string) {
   const [groupInviteUrlText, setGroupInviteUrlText] =
     useState('Copy Invite URL');
   const doCopyInviteUrlText = useCopy(groupInviteUrl).doCopy;
-  const [lureEnabled] = useLureEnabled(flag.split('/')[1]);
+  const [lureEnabled] = useLureEnabled(flag);
 
   const onCopy = useCallback(() => {
     doCopy();
