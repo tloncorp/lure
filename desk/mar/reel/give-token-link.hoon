@@ -1,11 +1,11 @@
-|_  [host=ship token=cord url=cord]
+|_  token-url=(unit [token=cord url=cord])
 ++  grad  %noun
 ++  grab
   |%
-  ++  noun  (pair ship (pair cord cord))
+  ++  noun  (unit (pair cord cord))
   --
 ++  grow
   |%
-  ++  noun  [host token url]
+  ++  noun  token-url
   --
 --
