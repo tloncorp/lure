@@ -1,6 +1,7 @@
 import api from '@/api';
 import { useState, useEffect } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
+import { useGroupFlag } from '../groups';
 
 export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
@@ -18,12 +19,15 @@ export function useLureBait() {
 
 export function useLureEnabled(flag: string): [boolean, (b: boolean) => void] {
   const [lureEnabled, setLureEnabled] = useState<boolean>(false);
+  const currentFlag = useGroupFlag();
 
-  useEffectOnce(() => {
-    api
-      .subscribeOnce('grouper', `/group-enabled/${flag}`, 20000)
-      .then((result) => setLureEnabled(result));
-  });
+  useEffect(() => {
+    if (flag === currentFlag) {
+      api
+        .subscribeOnce('grouper', `/group-enabled/${flag}`, 20000)
+        .then((result) => setLureEnabled(result));
+    }
+  }, [currentFlag]);
 
   return [lureEnabled, setLureEnabled];
 }
@@ -67,14 +71,17 @@ export function useLureWelcome(name: string): [string, (s: string) => void] {
 
 export function useGroupInviteUrl(flag: string): [string, () => void] {
   const [url, setUrl] = useState<string>('');
+  const currentFlag = useGroupFlag();
 
   function checkInviteUrl() {
-    api.subscribeOnce('reel', `/token-link/${flag}`, 20000).then((result) => {
-      setUrl(result);
-    });
+    if (flag === currentFlag) {
+      api.subscribeOnce('reel', `/token-link/${flag}`, 20000).then((result) => {
+        setUrl(result);
+      });
+    }
   }
 
-  useEffectOnce(checkInviteUrl);
+  useEffect(checkInviteUrl, [currentFlag]);
 
   return [url, checkInviteUrl];
 }
