@@ -49,7 +49,8 @@
       %fact
     =+  !<(=bite:reel q.cage.sign)
     ?>  (~(has in enabled-groups) token.bite)
-    =/  =invite:groups  [[our.bowl token.bite] ship.bite]
+    ?>  ?=([%bite-1 *] bite)
+    =/  =invite:groups  [[our.bowl token.bite] joiner.bite]
     :_  this  
     ~[[%pass /invite %agent [our.bowl %groups] %poke %group-invite !>(invite)]]
   ==

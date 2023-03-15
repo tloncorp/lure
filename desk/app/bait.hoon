@@ -110,11 +110,15 @@
         (give not-found:gen:server)
       ?.  =('ship=%7E' (end [3 8] q.u.body.request))
         (give not-found:gen:server)
-      =/  invitee  (slav %p (cat 3 '~' (rsh [3 8] q.u.body.request)))
-      :-  :*  %pass  /bite  %agent  [inviter %reel]
-              %poke  %reel-bite  !>([%bite-0 token invitee])
+      =/  joiner  (slav %p (cat 3 '~' (rsh [3 8] q.u.body.request)))
+      :*  :*  %pass  /bite  %agent  [inviter %reel]
+              %poke  %reel-bite  !>([%bite-1 token joiner inviter])
           ==
-      (give (manx-response:gen:server (sent-page invitee)))
+          :*  %pass  /bite  %agent  [our.bowl %reel]
+              %poke  %reel-bite  !>([%bite-1 token joiner inviter])
+          ==
+          (give (manx-response:gen:server (sent-page joiner)))
+      ==
     ==
     ::
     ++  give
