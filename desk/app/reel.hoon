@@ -47,7 +47,7 @@
 ::
 ++  on-init
   ^-  (quip card _this)
-  `this(vic 'https://bait-dev.tlon.io/lure/', civ ~samnec-dozzod-marzod)
+  `this(vic 'https://tlon.network/lure/', civ ~loshut-lonreg)
 ::
 ++  on-save  !>(state)
 ++  on-load
@@ -58,9 +58,9 @@
       %2
     `this(state old)
       %1
-    `this(state [%2 'https://bait-dev.tlon.io/lure/' ~samnec-dozzod-marzod ~ ~])
+    `this(state [%2 'https://tlon.network/lure/' ~loshut-lonreg ~ ~])
       %0
-    `this(state [%2 'https://bait-dev.tlon.io/lure/' ~samnec-dozzod-marzod ~ ~])
+    `this(state [%2 'https://tlon.network/lure/' ~loshut-lonreg ~ ~])
   ==
 ::
 ++  on-poke
