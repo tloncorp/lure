@@ -130,9 +130,10 @@
       %fact
     =+  !<(=bite:reel q.cage.sign)
     ?>  =(token token.bite)
+    ?>  ?=([%bite-1 *] bite)
     =/  =action:dm:chat
-      :*  ship.bite
-          [ship.bite now.bowl]
+      :*  joiner.bite
+          [joiner.bite now.bowl]
           %add
           replying=~
           author=our.bowl
@@ -140,7 +141,7 @@
           content=[%story `~[dm-text]]
       ==
     =/  meet
-      [%meet ship.bite (~(put in *(set @ta)) pals-tag)]
+      [%meet joiner.bite (~(put in *(set @ta)) pals-tag)]
     :_  this
     :~  [%pass /dm %agent [our.bowl %chat] %poke %dm-action !>(action)]
         [%pass /meet %agent [our.bowl %pals] %poke %pals-command !>(meet)]
