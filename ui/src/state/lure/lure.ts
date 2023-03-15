@@ -1,6 +1,7 @@
 import api from '@/api';
 import { useState, useEffect } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
+import { useGroupFlag } from '../groups';
 
 export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
@@ -16,30 +17,34 @@ export function useLureBait() {
   return lureBait;
 }
 
-export function useLureEnabled(name: string): [boolean, (b: boolean) => void] {
+export function useLureEnabled(flag: string): [boolean, (b: boolean) => void] {
   const [lureEnabled, setLureEnabled] = useState<boolean>(false);
+  const currentFlag = useGroupFlag();
 
-  useEffectOnce(() => {
-    api
-      .scry<boolean>({
-        app: 'grouper',
-        path: `/enabled/${name}`,
-      })
-      .then((result) => setLureEnabled(result));
-  });
+  useEffect(() => {
+    if (flag === currentFlag) {
+      api
+        .subscribeOnce('grouper', `/group-enabled/${flag}`, 20000)
+        .then((result) => setLureEnabled(result));
+    }
+  }, [currentFlag]);
 
   return [lureEnabled, setLureEnabled];
 }
 
-export function useLureMetadataExists(name: string, lureURL: string): [boolean, () => void] {
+export function useLureMetadataExists(
+  name: string,
+  lureURL: string
+): [boolean, () => void] {
   const [lureMetadataExists, setLureMetadataExists] = useState<boolean>(false);
 
   function checkLureMetadataExists() {
     api
       .scry<{ tag: string; fields: any }>({
         app: 'reel',
-        path: `/metadata/${name}`
-      }).then((result) => setLureMetadataExists(result.tag !== ""))
+        path: `/metadata/${name}`,
+      })
+      .then((result) => setLureMetadataExists(result.tag !== ''));
   }
 
   useEffect(checkLureMetadataExists, [name, lureURL]);
@@ -62,6 +67,23 @@ export function useLureWelcome(name: string): [string, (s: string) => void] {
   });
 
   return [lureWelcome, setLureWelcome];
+}
+
+export function useGroupInviteUrl(flag: string): [string, () => void] {
+  const [url, setUrl] = useState<string>('');
+  const currentFlag = useGroupFlag();
+
+  function checkInviteUrl() {
+    if (flag === currentFlag) {
+      api.subscribeOnce('reel', `/token-link/${flag}`, 20000).then((result) => {
+        setUrl(result);
+      });
+    }
+  }
+
+  useEffect(checkInviteUrl, [currentFlag]);
+
+  return [url, checkInviteUrl];
 }
 
 export async function lurePokeDescribe(token: string, metadata: any) {

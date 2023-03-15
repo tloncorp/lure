@@ -5,11 +5,13 @@
 +$  versioned-state
   $%  state-0
       state-1
+      state-2
   ==
 ::
 ::  vic: URL of bait service
 ::  civ: @p of bait service
 ::  our-metadata: map from tokens to their metadata
+::  outstanding-pokes: ships we have poked and await a response from
 ::
 +$  state-0
   $:  %0
@@ -23,8 +25,18 @@
       civ=ship
       our-metadata=(map cord metadata:reel)
   ==
++$  state-2
+  $:  %2
+      vic=@t
+      civ=ship
+      our-metadata=(map cord metadata:reel)
+      outstanding-pokes=(set (pair ship cord))
+  ==
+++  url-for-token
+  |=  [vic=cord our=ship token=cord]
+  (crip "{(trip vic)}{(trip (scot %p our))}/{(trip token)}")
 --
-=|  state-1
+=|  state-2
 =*  state  -
 ::
 %-  agent:dbug
@@ -43,10 +55,12 @@
   ^-  (quip card _this)
   =/  old  !<(versioned-state old-state)
   ?-  -.old
-      %1
+      %2
     `this(state old)
+      %1
+    `this(state [%2 'https://bait-dev.tlon.io/lure/' ~samnec-dozzod-marzod ~ ~])
       %0
-    `this(state *state-1)
+    `this(state [%2 'https://bait-dev.tlon.io/lure/' ~samnec-dozzod-marzod ~ ~])
   ==
 ::
 ++  on-poke
@@ -69,23 +83,32 @@
     [[%give %fact ~[/bites] mark !>(bite)]~ this]
   ::
       %reel-describe
-    =+  !<  [token=cord =metadata:reel]  vase
+    =+  !<([token=cord =metadata:reel] vase)
     :_  this(our-metadata (~(put by our-metadata) token metadata))
     ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token metadata])]]
+      %reel-want-token-link
+    =+  !<(token=cord vase)
+    :_  this
+    =/  result=(unit [cord cord])
+      ?.  (~(has by our-metadata) token)  ~
+      `[token (url-for-token vic our.bowl token)]
+    ~[[%pass [%token-link-want token ~] %agent [src.bowl %reel] %poke %reel-give-token-link !>(result)]]
+      %reel-give-token-link
+    =+  !<(result=(unit [cord cord]) vase)
+    ?~  result  `this
+    =/  [token=cord url=cord]  u.result
+    :_  this
+    ~[[%give %fact ~[[%token-link (scot %p src.bowl) token ~]] %json !>(s+url)]]
   ==
 ::
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
-  ?+  wire  (on-agent:def wire sign)
-      [%describe ~]
+  ?:  ?=([%token-link-want @ ~] wire)
     ?+  -.sign  (on-agent:def wire sign)
-        %poke-ack
-      ?~  p.sign
-        `this
-      (on-agent:def wire sign)
+        %poke-ack   `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.wire]))
     ==
-  ==
+  (on-agent:def wire sign)
 ::
 ++  on-watch
   |=  =path
@@ -93,6 +116,12 @@
   ?>  =(our.bowl src.bowl)
   ?+  path  (on-watch:def path)
     [%bites ~]  `this
+      [%token-link @ @ ~]
+    =/  target  (slav %p i.t.path)
+    =/  group   i.t.t.path
+    ?~  (~(has in outstanding-pokes) [target group])  `this
+    :_  this(outstanding-pokes (~(put in outstanding-pokes) [target group]))
+    ~[[%pass path %agent [target %reel] %poke %reel-want-token-link !>(group)]]
   ==
 ::
 ++  on-leave  on-leave:def
