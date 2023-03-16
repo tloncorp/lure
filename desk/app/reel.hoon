@@ -104,9 +104,10 @@
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
-  ?:  ?=([%token-link-want @ ~] wire)
+  ?:  ?=([%token-link @ @ ~] wire)
     ?+  -.sign  (on-agent:def wire sign)
-        %poke-ack   `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.wire]))
+        %poke-ack
+      `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.t.wire]))
     ==
   (on-agent:def wire sign)
 ::

@@ -65,10 +65,10 @@
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
-  ?:  ?=([%ask @ ~] wire)
+  ?:  ?=([%group-enabled @ @ ~] wire)
     ?+  -.sign  (on-agent:def wire sign)
         %poke-ack
-      `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.wire]))
+      `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.t.wire]))
     ==
   ?-  -.sign
       %poke-ack   `this
