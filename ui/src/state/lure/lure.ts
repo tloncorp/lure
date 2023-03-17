@@ -1,7 +1,7 @@
 import api from '@/api';
 import { useState, useEffect } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
-import { useGroupFlag } from '../groups';
+import { useGroupFlag, useGroupName } from '../groups';
 
 export function useLureBait() {
   const [lureBait, setLureBait] = useState('');
@@ -17,9 +17,31 @@ export function useLureBait() {
   return lureBait;
 }
 
+export async function lurePokeDescribe(token: string, metadata: any) {
+  await api.poke({
+    app: 'reel',
+    mark: 'reel-describe',
+    json: {
+      token,
+      metadata,
+    },
+  });
+}
+
+export async function lurePokeUndescribe(token: string) {
+  await api.poke({
+    app: 'reel',
+    mark: 'reel-undescribe',
+    json: {
+      token,
+    },
+  });
+}
+
 export function useLureEnabled(flag: string): [boolean, (b: boolean) => void] {
   const [lureEnabled, setLureEnabled] = useState<boolean>(false);
   const currentFlag = useGroupFlag();
+  const name = useGroupName();
 
   useEffect(() => {
     if (flag === currentFlag) {
@@ -27,9 +49,15 @@ export function useLureEnabled(flag: string): [boolean, (b: boolean) => void] {
         .subscribeOnce('grouper', `/group-enabled/${flag}`, 20000)
         .then((result) => setLureEnabled(result));
     }
-  }, [currentFlag]);
+  }, [flag, currentFlag]);
 
-  return [lureEnabled, setLureEnabled];
+  function enableOrDisable(b: boolean) {
+    if (!b) {
+      lurePokeUndescribe(name);
+    }
+    setLureEnabled(b);
+  }
+  return [lureEnabled, enableOrDisable];
 }
 
 export function useLureMetadataExists(
@@ -81,20 +109,9 @@ export function useGroupInviteUrl(flag: string): [string, () => void] {
     }
   }
 
-  useEffect(checkInviteUrl, [currentFlag]);
+  useEffect(checkInviteUrl, [flag, currentFlag]);
 
   return [url, checkInviteUrl];
-}
-
-export async function lurePokeDescribe(token: string, metadata: any) {
-  await api.poke({
-    app: 'reel',
-    mark: 'reel-describe',
-    json: {
-      token,
-      metadata,
-    },
-  });
 }
 
 export async function lureEnableGroup(name: string) {

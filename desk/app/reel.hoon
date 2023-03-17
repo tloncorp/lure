@@ -86,6 +86,10 @@
     =+  !<([token=cord =metadata:reel] vase)
     :_  this(our-metadata (~(put by our-metadata) token metadata))
     ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token metadata])]]
+      %reel-undescribe
+    =+  !<(token=cord vase)
+    :_  this(our-metadata (~(del by our-metadata) token))
+    ~[[%pass /undescribe %agent [civ %bait] %poke %bait-undescribe !>(token)]]
       %reel-want-token-link
     =+  !<(token=cord vase)
     :_  this
@@ -104,9 +108,10 @@
 ++  on-agent
   |=  [=wire =sign:agent:gall]
   ^-  (quip card _this)
-  ?:  ?=([%token-link-want @ ~] wire)
+  ?:  ?=([%token-link @ @ ~] wire)
     ?+  -.sign  (on-agent:def wire sign)
-        %poke-ack   `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.wire]))
+        %poke-ack
+      `this(outstanding-pokes (~(del in outstanding-pokes) [src.bowl i.t.t.wire]))
     ==
   (on-agent:def wire sign)
 ::
