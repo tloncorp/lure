@@ -86,6 +86,10 @@
     =+  !<([token=cord =metadata:reel] vase)
     :_  this(our-metadata (~(put by our-metadata) token metadata))
     ~[[%pass /describe %agent [civ %bait] %poke %bait-describe !>([token metadata])]]
+      %reel-undescribe
+    =+  !<(token=cord vase)
+    :_  this(our-metadata (~(del by our-metadata) token))
+    ~[[%pass /undescribe %agent [civ %bait] %poke %bait-undescribe !>(token)]]
       %reel-want-token-link
     =+  !<(token=cord vase)
     :_  this
