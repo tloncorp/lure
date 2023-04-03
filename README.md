@@ -1,4 +1,6 @@
-# lure
+# [ARCHIVED] Lure is now a part of landscape: https://github.com/tloncorp/landscape
+
+----
 
 Issues, Feature Branches, PRs
 - Please create an issue for the thing you're working on (makes async comms and discussion way easier if it's on the issue)
